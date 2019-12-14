@@ -4,19 +4,35 @@ namespace Logic.Tests
     using Dim.AirConditioner.Logic.Fakes;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Threading.Tasks;
 
     [TestClass]
     public class FakeAirConditionerTests
     {
         [TestMethod]
-        public void SetToCoolingMode_CurrentRoomTemepratureLowerThanTarget_AirConditionerSwitchesToStandBy()
+        public async Task SetToCoolingMode_CurrentRoomTemperatureLowerThanTarget_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(10);
+            IAirConditioner airConditioner = new FakeAirConditioner(5);
             airConditioner.PowerOn();
 
             // Act.
-            airConditioner.SetToCoolingMode(5);
+            await airConditioner.SetToCoolingMode(10);
+
+            // Assert
+            airConditioner.RoomTemperature.Should().Be(5);
+            airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
+        }
+
+        [TestMethod]
+        public async Task SetToCoolingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
+        {
+            // Arrange.
+            IAirConditioner airConditioner = new FakeAirConditioner(10);
+            airConditioner.PowerOff();
+
+            // Act.
+            await airConditioner.SetToCoolingMode(5);
 
             // Assert
             airConditioner.RoomTemperature.Should().Be(10);
@@ -24,17 +40,17 @@ namespace Logic.Tests
         }
 
         [TestMethod]
-        public void SetToCoolingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
+        public async Task SetToCoolingMode_RoomTemperatureIsHigherThanTarget_AirConditionerCoolsRoom()
         {
             // Arrange.
             IAirConditioner airConditioner = new FakeAirConditioner(10);
-            airConditioner.PowerOff();
+            airConditioner.PowerOn();
 
             // Act.
-            airConditioner.SetToCoolingMode(5);
+            await airConditioner.SetToCoolingMode(9);
 
             // Assert
-            airConditioner.RoomTemperature.Should().Be(10);
+            airConditioner.RoomTemperature.Should().Be(9);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
     }
