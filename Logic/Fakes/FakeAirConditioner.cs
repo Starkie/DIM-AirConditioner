@@ -3,7 +3,7 @@
     using System;
 
     /// <summary> Represents a working Air-Condintioner. </summary>
-    public class FakeAirConditioner
+    public class FakeAirConditioner : IAirConditioner
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
@@ -13,16 +13,13 @@
             this.RoomTemperature = this.GenerateInitialRoomTemperature();
         }
 
-        /// <summary>
-        ///     Gets a value indicating whether the air conditioner is currently powered on.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsOn { get; private set; }
 
-        /// <summary> Gets the temperature detected by the air conditioner. </summary>
+        /// <inheritdoc/>
         public decimal RoomTemperature { get; private set; }
 
-        /// <summary> Powers on the air conditioner. </summary>
-        /// <returns> A boolean indicating if the air conditioner was powered off successfully. </returns>
+        /// <inheritdoc/>
         public bool PowerOn()
         {
             this.IsOn = true;
@@ -30,8 +27,8 @@
             return true;
         }
 
-        /// <summary> Powers off the air conditioner. </summary>
-        /// <returns> A boolean indicating if the air conditioner was powered off successfully. </returns>
+        /// <inheritdoc/>
+
         public bool PowerOff()
         {
             this.IsOn = false;
