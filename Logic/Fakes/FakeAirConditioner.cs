@@ -10,9 +10,13 @@
         /// </summary>
         public FakeAirConditioner()
         {
+            this.CurrentMode = AirConditionerMode.StandBy;
+            this.IsOn = false;
             this.RoomTemperature = this.GenerateInitialRoomTemperature();
         }
 
+        /// <inheritdoc/>
+        public AirConditionerMode CurrentMode { get; private set; }
         /// <inheritdoc/>
         public bool IsOn { get; private set; }
 
