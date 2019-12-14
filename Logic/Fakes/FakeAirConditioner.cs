@@ -64,6 +64,23 @@
         }
 
         /// <summary>
+        ///     Sets the air conditioner to heating mode, to a target temperature. If the
+        ///     <see cref="RoomTemperature"/> is higher than the target temperature, it does nothing.
+        /// </summary>
+        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        public async Task StartHeatingMode(double targetTemperature)
+        {
+            if (!this.IsOn || this.RoomTemperature >= targetTemperature)
+            {
+                this.CurrentMode = AirConditionerMode.StandBy;
+
+                return;
+            }
+
+            await this.HeatRoom(targetTemperature);
+        }
+
+        /// <summary>
         ///     Generates an initial room temperature, for the air conditioner. The values returned
         ///     will be between 0ºc and 35ºc.
         /// </summary>
@@ -84,6 +101,23 @@
             while (this.RoomTemperature > targetTemperature)
             {
                 this.RoomTemperature -= 0.5;
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+
+            this.CurrentMode = AirConditionerMode.StandBy;
+        }
+
+        /// <summary> Process that heats up the current room to a target temperature. </summary>
+        /// <param name="targetTemperature"> The target temperature to achieve. </param>
+        /// <returns> An empty task that enables this method to be awaited. </returns>
+        private async Task HeatRoom(double targetTemperature)
+        {
+            this.CurrentMode = AirConditionerMode.Heating;
+
+            while (this.RoomTemperature < targetTemperature)
+            {
+                this.RoomTemperature += 0.5;
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }

@@ -35,5 +35,12 @@
         /// <summary> Sets the air conditioner to cooling mode, for a target temperature. </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
         Task StartCoolingMode(double targetTemperature);
+
+        /// <summary>
+        ///     Sets the air conditioner to heating mode, to a target temperature. If the
+        ///     <see cref="RoomTemperature"/> is higher than the target temperature, it does nothing.
+        /// </summary>
+        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        Task StartHeatingMode(double targetTemperature);
     }
 }
