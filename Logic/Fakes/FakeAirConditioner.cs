@@ -44,6 +44,20 @@
         }
 
         /// <summary>
+        ///     Sets the air conditioner to cooling mode, for a target temperature. If the
+        ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
+        /// </summary>
+        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        public void SetToCoolingMode(decimal targetTemperature)
+        {
+            if (!this.IsOn || this.RoomTemperature <= targetTemperature)
+            {
+                this.CurrentMode = AirConditionerMode.StandBy;
+
+                return;
+            }
+        }
+        /// <summary>
         ///     Generates an initial room temperature, for the air conditioner. The values returned
         ///     will be between 0ºc and 35ºc.
         /// </summary>

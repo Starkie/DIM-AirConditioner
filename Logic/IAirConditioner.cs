@@ -29,5 +29,9 @@
         /// <summary> Powers off the air conditioner. </summary>
         /// <returns> A boolean indicating if the air conditioner was powered off successfully. </returns>
         bool PowerOn();
+
+        /// <summary> Sets the air conditioner to cooling mode, for a target temperature. </summary>
+        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        void SetToCoolingMode(decimal targetTemperature);
     }
 }
