@@ -7,6 +7,10 @@
     /// <summary> Represents a working Air-Condintioner. </summary>
     public class FakeAirConditioner : IAirConditioner
     {
+        // Represents the current working operation of the fake air conditioner. For example, a
+        // cooling process.
+        private TemperatureChangeProcess currentTemperatureChangeProcess;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
         /// </summary>
@@ -46,7 +50,7 @@
         }
 
         /// <summary>
-        ///     Sets the air conditioner to cooling mode, for a target temperature. If the
+        ///     Sets the air conditioner to cooling mode, to a target temperature. If the
         ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
         /// </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
@@ -59,7 +63,12 @@
                 return;
             }
 
-            // TODO: Instead of waiting, switch to a
+            // Cancel the current running process.
+            if (this.currentTemperatureChangeProcess?.IsRunning() == true)
+            {
+                await this.currentTemperatureChangeProcess.Cancel();
+            }
+
             await this.CoolRoom(targetTemperature);
         }
 
@@ -77,6 +86,12 @@
                 return;
             }
 
+            // Cancel the current running process.
+            if (this.currentTemperatureChangeProcess?.IsRunning() == true)
+            {
+                await this.currentTemperatureChangeProcess.Cancel();
+            }
+
             await this.HeatRoom(targetTemperature);
         }
 
@@ -91,15 +106,34 @@
 
             return random.Next(0, 35);
         }
+
         /// <summary> Process that cools down the current room to a target temperature. </summary>
         /// <param name="targetTemperature"> The target temperature to achieve. </param>
         /// <returns> An empty task that enables this method to be awaited. </returns>
         private async Task CoolRoom(double targetTemperature)
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task coolRoomTask = Task.Run(async () =>
+            {
+                await CoolRoomTask(targetTemperature, cancellationToken);
+            });
+
+            this.currentTemperatureChangeProcess = new TemperatureChangeProcess(coolRoomTask, cancellationTokenSource);
+        }
+
+        private async Task CoolRoomTask(double targetTemperature, CancellationToken cancellationToken)
+        {
             this.CurrentMode = AirConditionerMode.Cooling;
 
             while (this.RoomTemperature > targetTemperature)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 this.RoomTemperature -= 0.5;
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
@@ -113,10 +147,28 @@
         /// <returns> An empty task that enables this method to be awaited. </returns>
         private async Task HeatRoom(double targetTemperature)
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task coolRoomTask = Task.Run(async () =>
+            {
+                await HeatRoomTask(targetTemperature, cancellationToken);
+            });
+
+            this.currentTemperatureChangeProcess = new TemperatureChangeProcess(coolRoomTask, cancellationTokenSource);
+        }
+
+        private async Task HeatRoomTask(double targetTemperature, CancellationToken cancellationToken)
+        {
             this.CurrentMode = AirConditionerMode.Heating;
 
             while (this.RoomTemperature < targetTemperature)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 this.RoomTemperature += 0.5;
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
