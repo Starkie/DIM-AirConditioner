@@ -20,7 +20,7 @@
         /// <summary>
         ///     Gets the temperature detected by the air conditioner. Measured in centigrades.
         /// </summary>
-        decimal RoomTemperature { get; }
+        double RoomTemperature { get; }
 
         /// <summary> Powers on the air conditioner. </summary>
         /// <returns> A boolean indicating if the air conditioner was powered off successfully. </returns>
@@ -32,6 +32,6 @@
 
         /// <summary> Sets the air conditioner to cooling mode, for a target temperature. </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        void SetToCoolingMode(decimal targetTemperature);
+        void SetToCoolingMode(double targetTemperature);
     }
 }
