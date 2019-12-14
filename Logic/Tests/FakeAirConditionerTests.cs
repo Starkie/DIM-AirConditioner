@@ -4,6 +4,7 @@ namespace Logic.Tests
     using Dim.AirConditioner.Logic.Fakes;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
     using System.Threading.Tasks;
 
     [TestClass]
@@ -50,6 +51,8 @@ namespace Logic.Tests
             await airConditioner.StartCoolingMode(9);
 
             // Assert
+            await Task.Delay(TimeSpan.FromSeconds(11));
+
             airConditioner.RoomTemperature.Should().Be(9);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
@@ -95,6 +98,8 @@ namespace Logic.Tests
             await airConditioner.StartHeatingMode(11);
 
             // Assert
+            await Task.Delay(TimeSpan.FromSeconds(12));
+
             airConditioner.RoomTemperature.Should().Be(11);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
