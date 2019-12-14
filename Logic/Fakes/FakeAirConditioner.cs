@@ -20,6 +20,7 @@
 
         /// <inheritdoc/>
         public AirConditionerMode CurrentMode { get; private set; }
+
         /// <inheritdoc/>
         public bool IsOn { get; private set; }
 
@@ -35,7 +36,6 @@
         }
 
         /// <inheritdoc/>
-
         public bool PowerOff()
         {
             this.IsOn = false;
@@ -57,6 +57,7 @@
                 return;
             }
         }
+
         /// <summary>
         ///     Generates an initial room temperature, for the air conditioner. The values returned
         ///     will be between 0ºc and 35ºc.
