@@ -1,5 +1,7 @@
 ﻿namespace Dim.AirConditioner.Logic
 {
+    using System.Threading.Tasks;
+
     /// <summary>
     ///     Interface representing an air conditioner. Provides all the supported actions to control
     ///     the air conditioning system.
@@ -32,6 +34,6 @@
 
         /// <summary> Sets the air conditioner to cooling mode, for a target temperature. </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        void SetToCoolingMode(double targetTemperature);
+        Task SetToCoolingMode(double targetTemperature);
     }
 }

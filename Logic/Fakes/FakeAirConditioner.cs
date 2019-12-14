@@ -1,6 +1,8 @@
 ﻿namespace Dim.AirConditioner.Logic.Fakes
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary> Represents a working Air-Condintioner. </summary>
     public class FakeAirConditioner : IAirConditioner
@@ -48,7 +50,7 @@
         ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
         /// </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        public async void SetToCoolingMode(double targetTemperature)
+        public async Task SetToCoolingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature <= targetTemperature)
             {
@@ -56,6 +58,9 @@
 
                 return;
             }
+
+            // TODO: Instead of waiting, switch to a
+            await this.CoolRoom(targetTemperature);
         }
 
         /// <summary>
@@ -68,6 +73,22 @@
             Random random = new Random();
 
             return random.Next(0, 35);
+        }
+        /// <summary> Process that cools down the current room to a target temperature. </summary>
+        /// <param name="targetTemperature"> The target temperature to achieve. </param>
+        /// <returns> An empty task that enables this method to be awaited. </returns>
+        private async Task CoolRoom(double targetTemperature)
+        {
+            this.CurrentMode = AirConditionerMode.Cooling;
+
+            while (this.RoomTemperature > targetTemperature)
+            {
+                this.RoomTemperature -= 0.5;
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+
+            this.CurrentMode = AirConditionerMode.StandBy;
         }
     }
 }
