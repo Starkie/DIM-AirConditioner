@@ -53,5 +53,50 @@ namespace Logic.Tests
             airConditioner.RoomTemperature.Should().Be(9);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
+
+        [TestMethod]
+        public async Task StartHeatingMode_CurrentRoomTemperatureHigherThanTarget_AirConditionerSwitchesToStandBy()
+        {
+            // Arrange.
+            IAirConditioner airConditioner = new FakeAirConditioner(30);
+            airConditioner.PowerOn();
+
+            // Act.
+            await airConditioner.StartHeatingMode(20);
+
+            // Assert
+            airConditioner.RoomTemperature.Should().Be(30);
+            airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
+        }
+
+        [TestMethod]
+        public async Task StartHeatingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
+        {
+            // Arrange.
+            IAirConditioner airConditioner = new FakeAirConditioner(10);
+            airConditioner.PowerOff();
+
+            // Act.
+            await airConditioner.StartHeatingMode(20);
+
+            // Assert
+            airConditioner.RoomTemperature.Should().Be(10);
+            airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
+        }
+
+        [TestMethod]
+        public async Task StartHeatingMode_RoomTemperatureIsLowerThanTarget_AirConditionerHeatsRoom()
+        {
+            // Arrange.
+            IAirConditioner airConditioner = new FakeAirConditioner(10);
+            airConditioner.PowerOn();
+
+            // Act.
+            await airConditioner.StartHeatingMode(11);
+
+            // Assert
+            airConditioner.RoomTemperature.Should().Be(11);
+            airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
+        }
     }
 }
