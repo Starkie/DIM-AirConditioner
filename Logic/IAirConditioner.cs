@@ -7,10 +7,10 @@
     public interface IAirConditioner
     {
         /// <summary>
-        ///     Represents the current working mode of the air conditioning system. For example,
-        ///     cooling the room.
+        ///     Gets the current working mode of the air conditioning system. For example, cooling
+        ///     the room.
         /// </summary>
-        public AirConditionerMode CurrentMode { get; }
+        AirConditionerMode CurrentMode { get; }
 
         /// <summary>
         ///     Gets a value indicating whether the air conditioner is currently powered on.
