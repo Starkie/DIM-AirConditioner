@@ -8,11 +8,14 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
         /// </summary>
-        public FakeAirConditioner()
+        /// <param name="initialTemperature">
+        ///     The initial room temperature. If none is specified, a random temperature is generated.
+        /// </param>
+        public FakeAirConditioner(decimal? initialTemperature = null)
         {
             this.CurrentMode = AirConditionerMode.StandBy;
             this.IsOn = false;
-            this.RoomTemperature = this.GenerateInitialRoomTemperature();
+            this.RoomTemperature = initialTemperature ?? this.GenerateInitialRoomTemperature();
         }
 
         /// <inheritdoc/>
