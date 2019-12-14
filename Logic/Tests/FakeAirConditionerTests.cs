@@ -17,7 +17,7 @@ namespace Logic.Tests
             airConditioner.PowerOn();
 
             // Act.
-            await airConditioner.SetToCoolingMode(10);
+            await airConditioner.StartCoolingMode(10);
 
             // Assert
             airConditioner.RoomTemperature.Should().Be(5);
@@ -32,7 +32,7 @@ namespace Logic.Tests
             airConditioner.PowerOff();
 
             // Act.
-            await airConditioner.SetToCoolingMode(5);
+            await airConditioner.StartCoolingMode(5);
 
             // Assert
             airConditioner.RoomTemperature.Should().Be(10);
@@ -47,7 +47,7 @@ namespace Logic.Tests
             airConditioner.PowerOn();
 
             // Act.
-            await airConditioner.SetToCoolingMode(9);
+            await airConditioner.StartCoolingMode(9);
 
             // Assert
             airConditioner.RoomTemperature.Should().Be(9);

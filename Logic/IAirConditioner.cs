@@ -34,6 +34,6 @@
 
         /// <summary> Sets the air conditioner to cooling mode, for a target temperature. </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        Task SetToCoolingMode(double targetTemperature);
+        Task StartCoolingMode(double targetTemperature);
     }
 }

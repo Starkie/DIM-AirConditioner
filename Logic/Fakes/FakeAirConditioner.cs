@@ -50,7 +50,7 @@
         ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
         /// </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        public async Task SetToCoolingMode(double targetTemperature)
+        public async Task StartCoolingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature <= targetTemperature)
             {
