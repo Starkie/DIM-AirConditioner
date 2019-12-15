@@ -16,7 +16,7 @@
 
                 IAirConditioner airConditioner = new FakeAirConditioner(logger, initialTemperature: 23.5);
 
-                VoiceControlledAirConditioner voiceControlledAirConditioner = new VoiceControlledAirConditioner(airConditioner);
+                VoiceControlledAirConditioner voiceControlledAirConditioner = new VoiceControlledAirConditioner(logger, airConditioner);
 
                 while (true)
                 {

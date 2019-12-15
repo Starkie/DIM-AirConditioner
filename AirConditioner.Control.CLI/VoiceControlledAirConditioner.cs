@@ -1,44 +1,70 @@
-﻿using System.Speech.Recognition;
-using System.Speech.Synthesis;
-using Dim.AirConditioner.Logic;
-
-namespace Dim.AirConditioner.Control.Cli
+﻿namespace Dim.AirConditioner.Control.Cli
 {
+    using System.Speech.Recognition;
+    using System.Speech.Synthesis;
+    using Dim.AirConditioner.Logic;
+    using Microsoft.Extensions.Logging;
+
+    /// <summary>
+    ///     Class that allows the control of an <see cref="IAirConditioner"/> by voice commands.
+    /// </summary>
     public class VoiceControlledAirConditioner
     {
+        // The instance of the applications logger.
+        private readonly ILogger logger;
+
         // The air conditioner to control by the voice commands.
         private readonly IAirConditioner airConditioner;
 
-        private SpeechRecognitionEngine recognizer;
+        // The instance of the speech recognizar, that interprets the voice commands.
+        private readonly SpeechRecognitionEngine speechRecognizer;
 
-        private SpeechSynthesizer synth;
+        // The instance of the speech synthetizer, that 'speaks' the system responses.
+        private readonly SpeechSynthesizer speechSynthesizer;
 
-        public VoiceControlledAirConditioner(IAirConditioner airConditioner)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="VoiceControlledAirConditioner"/> class.
+        /// </summary>
+        /// <param name="logger"> The logger. </param>
+        /// <param name="airConditioner">
+        ///     The instance of the air conditioner to control by the voice commands.
+        /// </param>
+        public VoiceControlledAirConditioner(ILogger logger, IAirConditioner airConditioner)
         {
+            this.logger = logger;
             this.airConditioner = airConditioner;
 
-            this.recognizer = new SpeechRecognitionEngine();
+            this.speechSynthesizer = new SpeechSynthesizer();
+            this.speechSynthesizer.Speak("Inicializando la Aplicación");
 
-            this.synth = new SpeechSynthesizer();
+            this.speechRecognizer = new SpeechRecognitionEngine();
+            this.SetUpSpeechRecognizerCommands();
 
-            this.synth.Speak("Inicializando la Aplicación");
+            this.speechSynthesizer.Speak("Aplicación preparada para reconocer su voz");
+        }
 
-            Grammar grammar = this.BuildAirConditionerControlGrammar();
-            this.recognizer.SetInputToDefaultAudioDevice();
-            this.recognizer.UnloadAllGrammars();
-            this.recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
-            grammar.Enabled = true;
-            this.recognizer.LoadGrammar(grammar);
-            this.recognizer.SpeechRecognized += this.recognizer_SpeechRecognized;
+        private void SetUpSpeechRecognizerCommands()
+        {
+            // Only commands recognized with a 60% confidence will be accepted and executed.
+            this.speechRecognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
-            //reconocimiento asíncrono y múltiples veces
-            this.recognizer.RecognizeAsync(RecognizeMode.Multiple);
-            this.synth.Speak("Aplicación preparada para reconocer su voz");
+            // Load the grammar.
+            Grammar voiceCommandsGrammar = this.BuildAirConditionerControlGrammar();
+            voiceCommandsGrammar.Enabled = true;
+            this.speechRecognizer.LoadGrammar(voiceCommandsGrammar);
+
+            // Set up input device. Picks the default microphone configured in the system.
+            this.speechRecognizer.SetInputToDefaultAudioDevice();
+
+            // Set up the event handler, which will redirect the commands to the aproppiate code.
+            this.speechRecognizer.SpeechRecognized += this.Recognizer_SpeechRecognized;
+
+            this.speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
         }
 
         private Grammar BuildAirConditionerControlGrammar()
         {
-            this.synth.Speak("Creando ahora la gramática");
+            this.speechSynthesizer.Speak("Creando ahora la gramática");
 
             // Power On.
             GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOnCommand);
@@ -52,12 +78,18 @@ namespace Dim.AirConditioner.Control.Cli
             GrammarBuilder currentTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CurrentTemperatureCommand);
             SemanticResultKey currentTemperatureMapping = new SemanticResultKey("CurrentTemperature", currentTemperatureCommand);
 
-            Choices commandCatalog = new Choices(powerOnCommandMapping, powerOffCommandMapping, currentTemperatureMapping);
+            Choices commandCatalog = new Choices(
+                powerOnCommandMapping,
+                powerOffCommandMapping,
+                currentTemperatureMapping);
 
             return new Grammar(commandCatalog);
         }
 
-        private void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        /// <summary> Event handler tasked with routing the recognized voice commands. </summary>
+        /// <param name="sender"> The object that caused the event. </param>
+        /// <param name="e"> The speech recognized commands. </param>
+        private void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             SemanticValue semantics = e.Result.Semantics;
 
@@ -84,31 +116,31 @@ namespace Dim.AirConditioner.Control.Cli
         {
             if (this.airConditioner.IsOn)
             {
-                this.synth.Speak("El aire acondicionado ya estaba encendido.");
+                this.speechSynthesizer.Speak("El aire acondicionado ya estaba encendido.");
 
                 return;
             }
 
             this.airConditioner.PowerOn();
-            this.synth.Speak("Aire acondicionado encendido.");
+            this.speechSynthesizer.Speak("Aire acondicionado encendido.");
         }
 
         private void PowerOffCommand()
         {
             if (!this.airConditioner.IsOn)
             {
-                this.synth.Speak("El aire acondicionado ya estaba apagado.");
+                this.speechSynthesizer.Speak("El aire acondicionado ya estaba apagado.");
 
                 return;
             }
 
             this.airConditioner.PowerOff();
-            this.synth.Speak("Aire acondicionado apagado.");
+            this.speechSynthesizer.Speak("Aire acondicionado apagado.");
         }
 
         private void CurrentTemperatureCommand()
         {
-            this.synth.Speak(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
+            this.speechSynthesizer.Speak(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
         }
     }
 }
