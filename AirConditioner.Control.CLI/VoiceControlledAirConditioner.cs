@@ -1,5 +1,6 @@
 ﻿namespace Dim.AirConditioner.Control.Cli
 {
+    using System.Linq;
     using System.Speech.Recognition;
     using System.Speech.Synthesis;
     using Dim.AirConditioner.Logic;
@@ -35,12 +36,12 @@
             this.airConditioner = airConditioner;
 
             this.speechSynthesizer = new SpeechSynthesizer();
-            this.speechSynthesizer.Speak("Inicializando la Aplicación");
+            this.speechSynthesizer.SpeakAsync("Inicializando la Aplicación");
 
             this.speechRecognizer = new SpeechRecognitionEngine();
             this.SetUpSpeechRecognizerCommands();
 
-            this.speechSynthesizer.Speak("Aplicación preparada para reconocer su voz");
+            this.speechSynthesizer.SpeakAsync("Aplicación preparada para reconocer su voz");
         }
 
         private void SetUpSpeechRecognizerCommands()
@@ -64,7 +65,7 @@
 
         private Grammar BuildAirConditionerControlGrammar()
         {
-            this.speechSynthesizer.Speak("Creando ahora la gramática");
+            this.speechSynthesizer.SpeakAsync("Creando ahora la gramática");
 
             // Power On.
             GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOnCommand);
@@ -78,10 +79,33 @@
             GrammarBuilder currentTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CurrentTemperatureCommand);
             SemanticResultKey currentTemperatureMapping = new SemanticResultKey("CurrentTemperature", currentTemperatureCommand);
 
+            // Target Temperature recognition.
+            Choices numberChoice = new Choices(Enumerable.Range(0, 100)
+                .Select(i => i.ToString())
+                .ToArray());
+
+            SemanticResultKey targetTempMapping = new SemanticResultKey("TargetTemp", numberChoice);
+
+            // Heat Room.
+            GrammarBuilder heatRoomCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.HeatRoom);
+            heatRoomCommand.Append(targetTempMapping);
+            heatRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+
+            SemanticResultKey heatRoomCommandMapping = new SemanticResultKey("HeatRoom", heatRoomCommand);
+
+            // Cool room.
+            GrammarBuilder coolRoomCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CoolRoom);
+            coolRoomCommand.Append(targetTempMapping);
+            coolRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+
+            SemanticResultKey coolRoomCommandMapping = new SemanticResultKey("CoolRoom", coolRoomCommand);
+
             Choices commandCatalog = new Choices(
                 powerOnCommandMapping,
                 powerOffCommandMapping,
-                currentTemperatureMapping);
+                currentTemperatureMapping,
+                heatRoomCommandMapping,
+                coolRoomCommandMapping);
 
             return new Grammar(commandCatalog);
         }
@@ -110,37 +134,60 @@
             {
                 this.CurrentTemperatureCommand();
             }
+
+            if (semantics.ContainsKey("HeatRoom"))
+            {
+                SemanticValue heatRoomSemanticValue = semantics["HeatRoom"];
+
+                double targetTemperature = double.Parse(heatRoomSemanticValue["TargetTemp"].Value.ToString());
+
+                this.airConditioner.StartHeatingMode(targetTemperature);
+
+                this.speechSynthesizer.SpeakAsync("Calentando la habitación a " + targetTemperature + " grados centígrados.");
+            }
+
+            if (semantics.ContainsKey("CoolRoom"))
+            {
+                SemanticValue coolRoomSemanticValue = semantics["CoolRoom"];
+
+                double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
+
+                this.airConditioner.StartCoolingMode(targetTemperature);
+
+                this.speechSynthesizer.SpeakAsync("Enfriando la habitación a " + targetTemperature + " grados centígrados.");
+            }
         }
 
         private void PowerOnCommand()
         {
             if (this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.Speak("El aire acondicionado ya estaba encendido.");
+                this.speechSynthesizer.SpeakAsync("El aire acondicionado ya estaba encendido.");
 
                 return;
             }
 
             this.airConditioner.PowerOn();
-            this.speechSynthesizer.Speak("Aire acondicionado encendido.");
+            this.speechSynthesizer.SpeakAsync("Aire acondicionado encendido.");
         }
 
         private void PowerOffCommand()
         {
             if (!this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.Speak("El aire acondicionado ya estaba apagado.");
+                this.speechSynthesizer.SpeakAsync("El aire acondicionado ya estaba apagado.");
 
                 return;
             }
 
+            this.speechSynthesizer.SpeakAsync("Apagando aire acondicionado.");
             this.airConditioner.PowerOff();
-            this.speechSynthesizer.Speak("Aire acondicionado apagado.");
+            this.speechSynthesizer.SpeakAsync("Aire acondicionado apagado.");
         }
 
         private void CurrentTemperatureCommand()
         {
-            this.speechSynthesizer.Speak(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
+            this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
         }
     }
 }
