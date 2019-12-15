@@ -62,6 +62,13 @@
         public bool PowerOff()
         {
             this.IsOn = false;
+
+            // Cancel the current running process.
+            if (this.currentTemperatureChangeProcess?.IsRunning() == true)
+            {
+                Task.WaitAll(this.currentTemperatureChangeProcess.Cancel());
+            }
+
             this.LogCurrentRoomTemperature();
 
             return true;
