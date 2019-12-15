@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIM-AirConditioner", "DIM-AirConditioner.csproj", "{245DB7B0-1C21-4B3B-988A-53290CDB7435}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{CBAB58EA-9404-4CC3-8C1D-F018FB0CAE98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Tests", "Logic\Tests\Logic.Tests.csproj", "{BC35FFAD-1CD2-4505-9515-D47131540D37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirConditioner.Control.CLI", "AirConditioner.Control.CLI\AirConditioner.Control.CLI.csproj", "{6EC46013-1A43-44A8-BCF3-CF85A6D117B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{398D6F95-2D1C-4EC4-BE8F-1750D97F21E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{245DB7B0-1C21-4B3B-988A-53290CDB7435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{245DB7B0-1C21-4B3B-988A-53290CDB7435}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{245DB7B0-1C21-4B3B-988A-53290CDB7435}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{245DB7B0-1C21-4B3B-988A-53290CDB7435}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CBAB58EA-9404-4CC3-8C1D-F018FB0CAE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CBAB58EA-9404-4CC3-8C1D-F018FB0CAE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBAB58EA-9404-4CC3-8C1D-F018FB0CAE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,9 +25,17 @@ Global
 		{BC35FFAD-1CD2-4505-9515-D47131540D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC35FFAD-1CD2-4505-9515-D47131540D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC35FFAD-1CD2-4505-9515-D47131540D37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC46013-1A43-44A8-BCF3-CF85A6D117B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC46013-1A43-44A8-BCF3-CF85A6D117B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC46013-1A43-44A8-BCF3-CF85A6D117B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC46013-1A43-44A8-BCF3-CF85A6D117B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CBAB58EA-9404-4CC3-8C1D-F018FB0CAE98} = {398D6F95-2D1C-4EC4-BE8F-1750D97F21E7}
+		{BC35FFAD-1CD2-4505-9515-D47131540D37} = {398D6F95-2D1C-4EC4-BE8F-1750D97F21E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F267B312-C3C3-4EE8-B9F9-D1773C9F78E1}
