@@ -8,18 +8,18 @@
     /// <summary> Represents a working Air-Condintioner. </summary>
     public class FakeAirConditioner : IAirConditioner
     {
-        // Represents the current working operation of the fake air conditioner. For example, a
-        // cooling process.
-        private TemperatureChangeProcess currentTemperatureChangeProcess;
-
-        // Logger to output information about the execution of the air conditioner.
-        private readonly ILogger logger;
-
         // The max temperature that the air conditioner can heat the room to.
         private const double MAX_TEMPERATURE = 40;
 
         // The min temperature that the air conditioner can cool the room to.
         private const double MIN_TEMPERATURE = -5;
+
+        // Logger to output information about the execution of the air conditioner.
+        private readonly ILogger logger;
+
+        // Represents the current working operation of the fake air conditioner. For example, a
+        // cooling process.
+        private TemperatureChangeProcess currentTemperatureChangeProcess;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
