@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Logic.Tests
+﻿namespace Dim.AirConditioner.Logic.Tests
 {
+    using Microsoft.Extensions.Logging;
+
     public static class TestUtils
     {
         public static ILoggerFactory BuildLoggerFactory()

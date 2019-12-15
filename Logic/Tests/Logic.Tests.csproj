@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <AssemblyName>Dim.AirConditioner.Logic.Tests</AssemblyName>
+    <RootNamespace>Dim.AirConditioner.Logic.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

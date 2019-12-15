@@ -1,9 +1,10 @@
-namespace Logic.Tests
+namespace Dim.AirConditioner.Logic.Fakes.Tests
 {
     using System;
     using System.Threading.Tasks;
     using Dim.AirConditioner.Logic;
     using Dim.AirConditioner.Logic.Fakes;
+    using Dim.AirConditioner.Logic.Tests;
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
