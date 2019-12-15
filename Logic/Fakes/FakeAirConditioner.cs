@@ -15,6 +15,12 @@
         // Logger to output information about the execution of the air conditioner.
         private readonly ILogger logger;
 
+        // The max temperature that the air conditioner can heat the room to.
+        private const double MAX_TEMPERATURE = 40;
+
+        // The min temperature that the air conditioner can cool the room to.
+        private const double MIN_TEMPERATURE = -5;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
         /// </summary>
@@ -79,7 +85,7 @@
                 await this.currentTemperatureChangeProcess.Cancel();
             }
 
-            await this.CoolRoom(targetTemperature);
+            await this.CoolRoom(Math.Max(targetTemperature, MIN_TEMPERATURE));
         }
 
         /// <summary>
@@ -102,7 +108,7 @@
                 await this.currentTemperatureChangeProcess.Cancel();
             }
 
-            await this.HeatRoom(targetTemperature);
+            await this.HeatRoom(Math.Min(targetTemperature, MAX_TEMPERATURE));
         }
 
         /// <summary>
