@@ -1,27 +1,39 @@
-﻿using Dim.AirConditioner.Logic;
-using Dim.AirConditioner.Logic.Fakes;
-using System;
-using System.Threading.Tasks;
-
-namespace Dim.AirConditioner.Control.Cli
+﻿namespace Dim.AirConditioner.Control.Cli
 {
+    using System;
+    using System.Threading.Tasks;
+    using Dim.AirConditioner.Logic;
+    using Dim.AirConditioner.Logic.Fakes;
+    using Microsoft.Extensions.Logging;
+
     internal static class Program
     {
         public static async Task Main()
         {
-            IAirConditioner airConditioner = new FakeAirConditioner(10);
-            airConditioner.PowerOn();
-
-            while (true)
+            using (ILoggerFactory loggerFactory = BuildLoggerFactory())
             {
-                await airConditioner.StartCoolingMode(5);
+                ILogger logger = loggerFactory.CreateLogger("Air Conditioner Voice Control");
 
-                await Task.Delay(TimeSpan.FromSeconds(15));
+                IAirConditioner airConditioner = new FakeAirConditioner(logger, initialTemperature: 23.5);
 
-                await airConditioner.StartHeatingMode(10);
+                VoiceControlledAirConditioner voiceControlledAirConditioner = new VoiceControlledAirConditioner(airConditioner);
 
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                while (true)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
             }
+        }
+
+        private static ILoggerFactory BuildLoggerFactory()
+        {
+            return LoggerFactory.Create(builder =>
+            {
+                builder.AddFilter("Microsoft", LogLevel.Warning)
+                       .AddFilter("System", LogLevel.Warning)
+                       .AddFilter("Dim.AirConditioner", LogLevel.Debug)
+                       .AddConsole();
+            });
         }
     }
 }
