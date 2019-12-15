@@ -17,6 +17,9 @@
         // Logger to output information about the execution of the air conditioner.
         private readonly ILogger logger;
 
+        // Represents the seconds that must pass between temperature changes.
+        private readonly int secondsToTemperatureChange;
+
         // Represents the current working operation of the fake air conditioner. For example, a
         // cooling process.
         private TemperatureChangeProcess currentTemperatureChangeProcess;
@@ -28,12 +31,13 @@
         ///     The initial room temperature. If none is specified, a random temperature is generated.
         /// </param>
         /// <param name="logger"> Instance of a logger. </param>
-        public FakeAirConditioner(ILogger logger, double? initialTemperature = null)
+        public FakeAirConditioner(ILogger logger, double? initialTemperature = null, int secondsToTemperatureChange = 5)
         {
             this.CurrentMode = AirConditionerMode.StandBy;
             this.IsOn = false;
             this.logger = logger;
             this.RoomTemperature = initialTemperature ?? this.GenerateInitialRoomTemperature();
+            this.secondsToTemperatureChange = secondsToTemperatureChange;
         }
 
         /// <inheritdoc/>
@@ -153,7 +157,7 @@
                 this.RoomTemperature -= 0.5;
                 this.LogCurrentRoomTemperature();
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(this.secondsToTemperatureChange));
             }
 
             this.CurrentMode = AirConditionerMode.StandBy;
@@ -190,7 +194,7 @@
                 this.RoomTemperature += 0.5;
                 this.LogCurrentRoomTemperature();
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(this.secondsToTemperatureChange));
             }
 
             this.CurrentMode = AirConditionerMode.StandBy;

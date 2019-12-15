@@ -24,7 +24,7 @@ namespace Logic.Tests
         public async Task SetToCoolingMode_CurrentRoomTemperatureLowerThanTarget_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 5);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 5, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -39,7 +39,7 @@ namespace Logic.Tests
         public async Task SetToCoolingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOff();
 
             // Act.
@@ -54,14 +54,14 @@ namespace Logic.Tests
         public async Task SetToCoolingMode_RoomTemperatureIsHigherThanTarget_AirConditionerCoolsRoom()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
             await airConditioner.StartCoolingMode(9);
 
             // Assert
-            await Task.Delay(TimeSpan.FromSeconds(11));
+            await Task.Delay(TimeSpan.FromSeconds(1));
 
             airConditioner.RoomTemperature.Should().Be(9);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
@@ -71,7 +71,7 @@ namespace Logic.Tests
         public async Task StartHeatingMode_CurrentRoomTemperatureHigherThanTarget_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 30);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 30, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -86,7 +86,7 @@ namespace Logic.Tests
         public async Task StartHeatingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOff();
 
             // Act.
@@ -101,14 +101,14 @@ namespace Logic.Tests
         public async Task StartHeatingMode_RoomTemperatureIsLowerThanTarget_AirConditionerHeatsRoom()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
             await airConditioner.StartHeatingMode(11);
 
             // Assert
-            await Task.Delay(TimeSpan.FromSeconds(12));
+            await Task.Delay(TimeSpan.FromSeconds(1));
 
             airConditioner.RoomTemperature.Should().Be(11);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
