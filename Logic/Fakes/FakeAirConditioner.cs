@@ -3,6 +3,7 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Logging;
 
     /// <summary> Represents a working Air-Condintioner. </summary>
     public class FakeAirConditioner : IAirConditioner
@@ -11,16 +12,21 @@
         // cooling process.
         private TemperatureChangeProcess currentTemperatureChangeProcess;
 
+        // Logger to output information about the execution of the air conditioner.
+        private readonly ILogger logger;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="FakeAirConditioner"/> class.
         /// </summary>
         /// <param name="initialTemperature">
         ///     The initial room temperature. If none is specified, a random temperature is generated.
         /// </param>
-        public FakeAirConditioner(double? initialTemperature = null)
+        /// <param name="logger"> Instance of a logger. </param>
+        public FakeAirConditioner(ILogger logger, double? initialTemperature = null)
         {
             this.CurrentMode = AirConditionerMode.StandBy;
             this.IsOn = false;
+            this.logger = logger;
             this.RoomTemperature = initialTemperature ?? this.GenerateInitialRoomTemperature();
         }
 
@@ -37,6 +43,7 @@
         public bool PowerOn()
         {
             this.IsOn = true;
+            this.LogCurrentRoomTemperature();
 
             return true;
         }
@@ -45,6 +52,7 @@
         public bool PowerOff()
         {
             this.IsOn = false;
+            this.LogCurrentRoomTemperature();
 
             return true;
         }
@@ -62,6 +70,8 @@
 
                 return;
             }
+
+            this.LogCurrentRoomTemperature();
 
             // Cancel the current running process.
             if (this.currentTemperatureChangeProcess?.IsRunning() == true)
@@ -117,7 +127,7 @@
 
             Task coolRoomTask = Task.Run(async () =>
             {
-                await CoolRoomTask(targetTemperature, cancellationToken);
+                await this.CoolRoomTask(targetTemperature, cancellationToken);
             });
 
             this.currentTemperatureChangeProcess = new TemperatureChangeProcess(coolRoomTask, cancellationTokenSource);
@@ -135,11 +145,13 @@
                 }
 
                 this.RoomTemperature -= 0.5;
+                this.LogCurrentRoomTemperature();
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
 
             this.CurrentMode = AirConditionerMode.StandBy;
+            this.LogCurrentRoomTemperature();
         }
 
         /// <summary> Process that heats up the current room to a target temperature. </summary>
@@ -152,7 +164,7 @@
 
             Task coolRoomTask = Task.Run(async () =>
             {
-                await HeatRoomTask(targetTemperature, cancellationToken);
+                await this.HeatRoomTask(targetTemperature, cancellationToken);
             });
 
             this.currentTemperatureChangeProcess = new TemperatureChangeProcess(coolRoomTask, cancellationTokenSource);
@@ -170,11 +182,35 @@
                 }
 
                 this.RoomTemperature += 0.5;
+                this.LogCurrentRoomTemperature();
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
 
             this.CurrentMode = AirConditionerMode.StandBy;
+            this.LogCurrentRoomTemperature();
+        }
+
+        private void LogCurrentRoomTemperature()
+        {
+            string modeName = "";
+
+            switch (this.CurrentMode)
+            {
+                case AirConditionerMode.Cooling:
+                    modeName = "COOLING";
+
+                    break;
+                case AirConditionerMode.Heating:
+                    modeName = "HEATING";
+
+                    break;
+                case AirConditionerMode.StandBy:
+                    modeName = "STANDBY";
+                    break;
+            }
+
+            this.logger.LogInformation(FakeAirConditionerResources.CurrentRoomTemperature, modeName, this.RoomTemperature);
         }
     }
 }
