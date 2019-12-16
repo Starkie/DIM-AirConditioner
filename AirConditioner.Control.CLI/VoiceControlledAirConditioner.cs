@@ -196,6 +196,11 @@
 
         private void HeatRoomCoomand(double targetTemperature)
         {
+            if (!this.airConditioner.IsOn)
+            {
+                this.PowerOnCommand();
+            }
+
             bool wasHeatingModeEnabled = this.airConditioner.StartHeatingMode(targetTemperature).Result;
 
             if (wasHeatingModeEnabled)
@@ -212,6 +217,11 @@
 
         private void CoolRoomCommand(double targetTemperature)
         {
+            if (!this.airConditioner.IsOn)
+            {
+                this.PowerOnCommand();
+            }
+
             bool wasCoolingModeEnabled = this.airConditioner.StartCoolingMode(targetTemperature).Result;
 
             if (wasCoolingModeEnabled)
