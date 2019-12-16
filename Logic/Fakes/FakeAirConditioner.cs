@@ -79,13 +79,13 @@
         ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
         /// </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        public async Task StartCoolingMode(double targetTemperature)
+        public async Task<bool> StartCoolingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature <= targetTemperature)
             {
                 this.CurrentMode = AirConditionerMode.StandBy;
 
-                return;
+                return false;
             }
 
             this.LogCurrentRoomTemperature();
@@ -97,6 +97,8 @@
             }
 
             await this.CoolRoom(Math.Max(targetTemperature, MIN_TEMPERATURE));
+
+            return true;
         }
 
         /// <summary>
@@ -104,13 +106,13 @@
         ///     <see cref="RoomTemperature"/> is higher than the target temperature, it does nothing.
         /// </summary>
         /// <param name="targetTemperature"> The temperature to achieve. </param>
-        public async Task StartHeatingMode(double targetTemperature)
+        public async Task<bool> StartHeatingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature >= targetTemperature)
             {
                 this.CurrentMode = AirConditionerMode.StandBy;
 
-                return;
+                return false;
             }
 
             // Cancel the current running process.
@@ -120,6 +122,8 @@
             }
 
             await this.HeatRoom(Math.Min(targetTemperature, MAX_TEMPERATURE));
+
+            return true;
         }
 
         /// <summary>
@@ -210,7 +214,7 @@
 
         private void LogCurrentRoomTemperature()
         {
-            string modeName = "";
+            string modeName = string.Empty;
 
             switch (this.CurrentMode)
             {
