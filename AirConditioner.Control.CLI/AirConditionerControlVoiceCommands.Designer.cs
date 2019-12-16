@@ -61,6 +61,15 @@ namespace Dim.AirConditioner.Control.Cli {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cambiar temperatura a.
+        /// </summary>
+        internal static string ChangeTemperatureCommand {
+            get {
+                return ResourceManager.GetString("ChangeTemperatureCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enfríar la habitación a.
         /// </summary>
         internal static string CoolRoom {

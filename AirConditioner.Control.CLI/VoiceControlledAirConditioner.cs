@@ -107,12 +107,20 @@
 
             SemanticResultKey coolRoomCommandMapping = new SemanticResultKey("CoolRoom", coolRoomCommand);
 
+            // Change temperature.
+            GrammarBuilder changeRoomTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.ChangeTemperatureCommand);
+            changeRoomTemperatureCommand.Append(targetTempMapping);
+            changeRoomTemperatureCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+
+            SemanticResultKey changeRoomTemperatureCommandMapping = new SemanticResultKey("ChangeRoomTemp", changeRoomTemperatureCommand);
+
             Choices commandCatalog = new Choices(
                 powerOnCommandMapping,
                 powerOffCommandMapping,
                 currentTemperatureMapping,
                 heatRoomCommandMapping,
-                coolRoomCommandMapping);
+                coolRoomCommandMapping,
+                changeRoomTemperatureCommandMapping);
 
             return new Grammar(commandCatalog);
         }
@@ -156,6 +164,14 @@
                 double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
 
                 this.CoolRoomCommand(targetTemperature);
+            }
+
+            if (semantics.ContainsKey("ChangeRoomTemp"))
+            {
+                SemanticValue coolRoomSemanticValue = semantics["ChangeRoomTemp"];
+                double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
+
+                ChangeRoomTemperatureCommand(targetTemperature);
             }
         }
 
@@ -257,6 +273,25 @@
                 this.CurrentTemperatureCommand();
 
                 this.PowerOffCommand();
+            }
+        }
+
+        /// <summary>
+        ///     Command to start the <see cref="IAirConditioner"/> and heat up or cool down the room
+        ///     to the target temperature.
+        /// </summary>
+        /// <param name="targetTemperature">
+        ///     The temperature to heat up/cool down the room to.
+        /// </param>
+        private void ChangeRoomTemperatureCommand(double targetTemperature)
+        {
+            if (targetTemperature > this.airConditioner.RoomTemperature)
+            {
+                this.HeatRoomCoomand(targetTemperature);
+            }
+            else
+            {
+                this.CoolRoomCommand(targetTemperature);
             }
         }
     }
