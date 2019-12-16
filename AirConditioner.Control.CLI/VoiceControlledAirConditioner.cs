@@ -36,12 +36,11 @@
             this.airConditioner = airConditioner;
 
             this.speechSynthesizer = new SpeechSynthesizer();
-            this.speechSynthesizer.SpeakAsync("Inicializando la Aplicación");
 
             this.speechRecognizer = new SpeechRecognitionEngine();
             this.SetUpSpeechRecognizerCommands();
 
-            this.speechSynthesizer.SpeakAsync("Aplicación preparada para reconocer su voz");
+            this.PowerOnCommand();
         }
 
         private void SetUpSpeechRecognizerCommands()
@@ -65,8 +64,6 @@
 
         private Grammar BuildAirConditionerControlGrammar()
         {
-            this.speechSynthesizer.SpeakAsync("Creando ahora la gramática");
-
             // Power On.
             GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOnCommand);
             SemanticResultKey powerOnCommandMapping = new SemanticResultKey("PowerOn", powerOnAirConditionerCommand);
