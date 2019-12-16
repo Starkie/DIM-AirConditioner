@@ -164,13 +164,14 @@
         {
             if (this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.SpeakAsync("El aire acondicionado ya estaba encendido.");
+                this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.AlreadyOn);
 
                 return;
             }
 
             this.airConditioner.PowerOn();
-            this.speechSynthesizer.SpeakAsync("Aire acondicionado encendido.");
+
+            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.PoweredOn);
         }
 
         /// <summary> Command to power off the <see cref="IAirConditioner"/>. </summary>
@@ -178,14 +179,14 @@
         {
             if (!this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.SpeakAsync("El aire acondicionado ya estaba apagado.");
+                this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.AlreadyOff);
 
                 return;
             }
 
-            this.speechSynthesizer.SpeakAsync("Apagando aire acondicionado.");
+            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.TurningOff);
             this.airConditioner.PowerOff();
-            this.speechSynthesizer.SpeakAsync("Aire acondicionado apagado.");
+            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.TurnedOff);
         }
 
         /// <summary>
@@ -193,7 +194,7 @@
         /// </summary>
         private void CurrentTemperatureCommand()
         {
-            this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
+            this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
         }
 
         /// <summary>
@@ -215,11 +216,11 @@
 
             if (wasHeatingModeEnabled)
             {
-                this.speechSynthesizer.SpeakAsync("Calentando la habitación a " + targetTemperature + " grados centígrados.");
+                this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.HeatingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature >= targetTemperature)
             {
-                this.speechSynthesizer.Speak("No se ha encendido la calefacción.");
+                this.speechSynthesizer.Speak(AirConditionerSpeechResponses.FailStartingUp);
 
                 this.CurrentTemperatureCommand();
             }
@@ -245,11 +246,11 @@
 
             if (wasCoolingModeEnabled)
             {
-                this.speechSynthesizer.SpeakAsync("Enfriando la habitación a " + targetTemperature + " grados centígrados.");
+                this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.CoolingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature <= targetTemperature)
             {
-                this.speechSynthesizer.Speak("No se ha encendido la refrigeración.");
+                this.speechSynthesizer.Speak(AirConditionerSpeechResponses.FailStartingUp);
 
                 this.CurrentTemperatureCommand();
 

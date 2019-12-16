@@ -30,12 +30,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AirConditionerControlVoiceCommands.resx</DependentUpon>
     </Compile>
+    <Compile Update="AirConditionerSpeechResponses.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AirConditionerSpeechResponses.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="AirConditionerControlVoiceCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AirConditionerControlVoiceCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="AirConditionerSpeechResponses.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AirConditionerSpeechResponses.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

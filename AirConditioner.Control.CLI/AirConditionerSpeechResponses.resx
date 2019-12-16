@@ -117,34 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CoolRoom" xml:space="preserve">
-    <value>Enfríar la habitación a</value>
+  <data name="AlreadyOff" xml:space="preserve">
+    <value>El aire acondicionado ya estaba apagado.</value>
   </data>
-  <data name="CoolRoom2" xml:space="preserve">
-    <value>Bajar temperatura a</value>
+  <data name="AlreadyOn" xml:space="preserve">
+    <value>El aire acondicionado ya estaba encendido.</value>
   </data>
-  <data name="CoolRoom3" xml:space="preserve">
-    <value>Reducir temperatura a</value>
+  <data name="CoolingRoomToTemperature" xml:space="preserve">
+    <value>Enfriando la habitación a {0} grados centígrados.</value>
   </data>
-  <data name="CurrentTemperatureCommand" xml:space="preserve">
-    <value>Temperatura actual</value>
+  <data name="CurrentTemperatureResponse" xml:space="preserve">
+    <value>La temperatura actual en la habitación es de {0} grados centígrados.</value>
   </data>
-  <data name="DegreesKeyWord" xml:space="preserve">
-    <value>Grados</value>
+  <data name="FailStartingUp" xml:space="preserve">
+    <value>No se ha activado el aire acondicionado.</value>
   </data>
-  <data name="HeatRoom" xml:space="preserve">
-    <value>Calentar la habitación a</value>
+  <data name="HeatingRoomToTemperature" xml:space="preserve">
+    <value>Calentando la habitación a {0} grados centígrados.</value>
   </data>
-  <data name="HeatRoom2" xml:space="preserve">
-    <value>Aumentar temperatura a</value>
+  <data name="PoweredOn" xml:space="preserve">
+    <value>Aire acondicionado encendido.</value>
   </data>
-  <data name="HeatRoom3" xml:space="preserve">
-    <value>Subir temperatura a</value>
+  <data name="TurnedOff" xml:space="preserve">
+    <value>Aire acondicionado apagado.</value>
   </data>
-  <data name="PowerOffCommand" xml:space="preserve">
-    <value>Apagar aire acondicionado</value>
-  </data>
-  <data name="PowerOnCommand" xml:space="preserve">
-    <value>Encender aire acondicionado</value>
+  <data name="TurningOff" xml:space="preserve">
+    <value>"Apagando aire acondicionado.")</value>
   </data>
 </root>
