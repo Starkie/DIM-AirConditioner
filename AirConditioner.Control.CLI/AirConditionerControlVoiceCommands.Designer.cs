@@ -70,6 +70,24 @@ namespace Dim.AirConditioner.Control.Cli {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bajar temperatura a.
+        /// </summary>
+        internal static string CoolRoom2 {
+            get {
+                return ResourceManager.GetString("CoolRoom2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reducir temperatura a.
+        /// </summary>
+        internal static string CoolRoom3 {
+            get {
+                return ResourceManager.GetString("CoolRoom3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Temperatura actual.
         /// </summary>
         internal static string CurrentTemperatureCommand {
@@ -102,6 +120,24 @@ namespace Dim.AirConditioner.Control.Cli {
         internal static string HeatRoom {
             get {
                 return ResourceManager.GetString("HeatRoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aumentar temperatura a.
+        /// </summary>
+        internal static string HeatRoom2 {
+            get {
+                return ResourceManager.GetString("HeatRoom2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subir temperatura a.
+        /// </summary>
+        internal static string HeatRoom3 {
+            get {
+                return ResourceManager.GetString("HeatRoom3", resourceCulture);
             }
         }
         

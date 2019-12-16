@@ -87,14 +87,24 @@
             SemanticResultKey targetTempMapping = new SemanticResultKey("TargetTemp", numberChoice);
 
             // Heat Room.
-            GrammarBuilder heatRoomCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.HeatRoom);
+            Choices heatRoomChoices = new Choices(
+                AirConditionerControlVoiceCommands.HeatRoom,
+                AirConditionerControlVoiceCommands.HeatRoom2,
+                AirConditionerControlVoiceCommands.HeatRoom3);
+
+            GrammarBuilder heatRoomCommand = new GrammarBuilder(heatRoomChoices);
             heatRoomCommand.Append(targetTempMapping);
             heatRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
 
             SemanticResultKey heatRoomCommandMapping = new SemanticResultKey("HeatRoom", heatRoomCommand);
 
             // Cool room.
-            GrammarBuilder coolRoomCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CoolRoom);
+            Choices coolRoomChoices = new Choices(
+                AirConditionerControlVoiceCommands.CoolRoom,
+                AirConditionerControlVoiceCommands.CoolRoom2,
+                AirConditionerControlVoiceCommands.CoolRoom3);
+
+            GrammarBuilder coolRoomCommand = new GrammarBuilder(coolRoomChoices);
             coolRoomCommand.Append(targetTempMapping);
             coolRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
 

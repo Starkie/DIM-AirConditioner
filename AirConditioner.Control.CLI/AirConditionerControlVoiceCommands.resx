@@ -120,6 +120,12 @@
   <data name="CoolRoom" xml:space="preserve">
     <value>Enfríar la habitación a</value>
   </data>
+  <data name="CoolRoom2" xml:space="preserve">
+    <value>Bajar temperatura a</value>
+  </data>
+  <data name="CoolRoom3" xml:space="preserve">
+    <value>Reducir temperatura a</value>
+  </data>
   <data name="CurrentTemperatureCommand" xml:space="preserve">
     <value>Temperatura actual</value>
   </data>
@@ -131,6 +137,12 @@
   </data>
   <data name="HeatRoom" xml:space="preserve">
     <value>Calentar la habitación a</value>
+  </data>
+  <data name="HeatRoom2" xml:space="preserve">
+    <value>Aumentar temperatura a</value>
+  </data>
+  <data name="HeatRoom3" xml:space="preserve">
+    <value>Subir temperatura a</value>
   </data>
   <data name="PowerOffCommand" xml:space="preserve">
     <value>Apagar aire acondicionado</value>
