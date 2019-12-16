@@ -148,23 +148,17 @@
             if (semantics.ContainsKey("HeatRoom"))
             {
                 SemanticValue heatRoomSemanticValue = semantics["HeatRoom"];
-
                 double targetTemperature = double.Parse(heatRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                this.airConditioner.StartHeatingMode(targetTemperature);
-
-                this.speechSynthesizer.SpeakAsync("Calentando la habitación a " + targetTemperature + " grados centígrados.");
+                this.HeatRoomCoomand(targetTemperature);
             }
 
             if (semantics.ContainsKey("CoolRoom"))
             {
                 SemanticValue coolRoomSemanticValue = semantics["CoolRoom"];
-
                 double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                this.airConditioner.StartCoolingMode(targetTemperature);
-
-                this.speechSynthesizer.SpeakAsync("Enfriando la habitación a " + targetTemperature + " grados centígrados.");
+                this.CoolRoomCommand(targetTemperature);
             }
         }
 
@@ -198,6 +192,40 @@
         private void CurrentTemperatureCommand()
         {
             this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
+        }
+
+        private void HeatRoomCoomand(double targetTemperature)
+        {
+            bool wasHeatingModeEnabled = this.airConditioner.StartHeatingMode(targetTemperature).Result;
+
+            if (wasHeatingModeEnabled)
+            {
+                this.speechSynthesizer.SpeakAsync("Calentando la habitación a " + targetTemperature + " grados centígrados.");
+            }
+            else if (this.airConditioner.RoomTemperature >= targetTemperature)
+            {
+                this.speechSynthesizer.Speak("No se ha encendido la calefacción.");
+
+                this.CurrentTemperatureCommand();
+            }
+        }
+
+        private void CoolRoomCommand(double targetTemperature)
+        {
+            bool wasCoolingModeEnabled = this.airConditioner.StartCoolingMode(targetTemperature).Result;
+
+            if (wasCoolingModeEnabled)
+            {
+                this.speechSynthesizer.SpeakAsync("Enfriando la habitación a " + targetTemperature + " grados centígrados.");
+            }
+            else if (this.airConditioner.RoomTemperature <= targetTemperature)
+            {
+                this.speechSynthesizer.Speak("No se ha encendido la refrigeración.");
+
+                this.CurrentTemperatureCommand();
+
+                this.PowerOffCommand();
+            }
         }
     }
 }
