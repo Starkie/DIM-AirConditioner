@@ -1,8 +1,8 @@
 ﻿namespace Dim.AirConditioner.Control.Cli
 {
-    using System.Linq;
     using System.Speech.Recognition;
     using System.Speech.Synthesis;
+    using Dim.AirConditioner.Control.Cli.SpeechRecognition;
     using Dim.AirConditioner.Logic;
     using Microsoft.Extensions.Logging;
 
@@ -64,65 +64,15 @@
 
         private Grammar BuildAirConditionerControlGrammar()
         {
-            // Power On.
-            GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOnCommand);
-            SemanticResultKey powerOnCommandMapping = new SemanticResultKey("PowerOn", powerOnAirConditionerCommand);
+            Choices commandCatalog = new Choices();
 
-            // Power Off.
-            GrammarBuilder powerOffAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOffCommand);
-            SemanticResultKey powerOffCommandMapping = new SemanticResultKey("PowerOff", powerOffAirConditionerCommand);
-
-            // Current temperature.
-            GrammarBuilder currentTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CurrentTemperatureCommand);
-            SemanticResultKey currentTemperatureMapping = new SemanticResultKey("CurrentTemperature", currentTemperatureCommand);
-
-            // Target Temperature recognition.
-            Choices numberChoice = new Choices(Enumerable.Range(0, 100)
-                .Select(i => i.ToString())
-                .ToArray());
-
-            SemanticResultKey targetTempMapping = new SemanticResultKey("TargetTemp", numberChoice);
-
-            // Heat Room.
-            Choices heatRoomChoices = new Choices(
-                AirConditionerControlVoiceCommands.HeatRoom,
-                AirConditionerControlVoiceCommands.HeatRoom2,
-                AirConditionerControlVoiceCommands.HeatRoom3);
-
-            GrammarBuilder heatRoomCommand = new GrammarBuilder(heatRoomChoices);
-            heatRoomCommand.Append(targetTempMapping);
-            heatRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
-
-            SemanticResultKey heatRoomCommandMapping = new SemanticResultKey("HeatRoom", heatRoomCommand);
-
-            // Cool room.
-            Choices coolRoomChoices = new Choices(
-                AirConditionerControlVoiceCommands.CoolRoom,
-                AirConditionerControlVoiceCommands.CoolRoom2,
-                AirConditionerControlVoiceCommands.CoolRoom3);
-
-            GrammarBuilder coolRoomCommand = new GrammarBuilder(coolRoomChoices);
-            coolRoomCommand.Append(targetTempMapping);
-            coolRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
-
-            SemanticResultKey coolRoomCommandMapping = new SemanticResultKey("CoolRoom", coolRoomCommand);
-
-            // Change temperature.
-            GrammarBuilder changeRoomTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.ChangeTemperatureCommand);
-            changeRoomTemperatureCommand.Append(targetTempMapping);
-            changeRoomTemperatureCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
-
-            SemanticResultKey changeRoomTemperatureCommandMapping = new SemanticResultKey("ChangeRoomTemp", changeRoomTemperatureCommand);
-
-            Choices commandCatalog = new Choices(
-                powerOnCommandMapping,
-                powerOffCommandMapping,
-                currentTemperatureMapping,
-                heatRoomCommandMapping,
-                coolRoomCommandMapping,
-                changeRoomTemperatureCommandMapping);
-
-            return new Grammar(commandCatalog);
+            return commandCatalog.AddPowerOnCommand()
+                .AddPowerOffCommand()
+                .AddCurrentTemperatureCommand()
+                .AddHeatRoomCommand()
+                .AddCoolRoomCommand()
+                .AddChangeTemperatureCommand()
+                .BuildGrammar();
         }
 
         /// <summary> Event handler tasked with routing the recognized voice commands. </summary>
