@@ -223,6 +223,8 @@
                 this.speechSynthesizer.Speak(AirConditionerSpeechResponses.FailStartingUp);
 
                 this.CurrentTemperatureCommand();
+
+                this.PowerOffCommand();
             }
         }
 
