@@ -159,6 +159,7 @@
             }
         }
 
+        /// <summary> Command to power on the <see cref="IAirConditioner"/>. </summary>
         private void PowerOnCommand()
         {
             if (this.airConditioner.IsOn)
@@ -172,6 +173,7 @@
             this.speechSynthesizer.SpeakAsync("Aire acondicionado encendido.");
         }
 
+        /// <summary> Command to power off the <see cref="IAirConditioner"/>. </summary>
         private void PowerOffCommand()
         {
             if (!this.airConditioner.IsOn)
@@ -186,11 +188,22 @@
             this.speechSynthesizer.SpeakAsync("Aire acondicionado apagado.");
         }
 
+        /// <summary>
+        ///     Command that speaks aloud the current <see cref="IAirConditioner.RoomTemperature"/> .
+        /// </summary>
         private void CurrentTemperatureCommand()
         {
             this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerControlVoiceCommands.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
         }
 
+        /// <summary>
+        ///     Command to start the <see cref="IAirConditioner"/> and heat the room to the target temperature.
+        /// </summary>
+        /// <param name="targetTemperature"> The temperature to heat the room to. </param>
+        /// <remarks>
+        ///     If the target temperature is lower than the current
+        ///     <see cref="IAirConditioner.RoomTemperature"/>, the air conditioner will not start.
+        /// </remarks>
         private void HeatRoomCoomand(double targetTemperature)
         {
             if (!this.airConditioner.IsOn)
@@ -212,6 +225,15 @@
             }
         }
 
+        /// <summary>
+        ///     Command to start the <see cref="IAirConditioner"/> and cool down the room to the
+        ///     target temperature.
+        /// </summary>
+        /// <param name="targetTemperature"> The temperature to cool down the room to. </param>
+        /// <remarks>
+        ///     If the target temperature is higher than the current
+        ///     <see cref="IAirConditioner.RoomTemperature"/>, the air conditioner will not start.
+        /// </remarks>
         private void CoolRoomCommand(double targetTemperature)
         {
             if (!this.airConditioner.IsOn)
