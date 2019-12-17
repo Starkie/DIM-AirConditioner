@@ -24,6 +24,16 @@
         /// </summary>
         double RoomTemperature { get; }
 
+        /// <summary>
+        ///     Gets the min temperature that the air conditioner can cool the room to.
+        /// </summary>
+        double MinTemperature { get; }
+
+        /// <summary>
+        ///     Gets the max temperature that the air conditioner can heat the room to.
+        /// </summary>
+        double MaxTemperature { get; }
+
         /// <summary> Powers on the air conditioner. </summary>
         /// <returns> A boolean indicating if the air conditioner was powered off successfully. </returns>
         bool PowerOff();

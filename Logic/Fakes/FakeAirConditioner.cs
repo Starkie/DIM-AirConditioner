@@ -8,12 +8,6 @@
     /// <summary> Represents a working Air-Condintioner. </summary>
     public class FakeAirConditioner : IAirConditioner
     {
-        // The max temperature that the air conditioner can heat the room to.
-        public const double MAX_TEMPERATURE = 40;
-
-        // The min temperature that the air conditioner can cool the room to.
-        public const double MIN_TEMPERATURE = -5;
-
         // Logger to output information about the execution of the air conditioner.
         private readonly ILogger logger;
 
@@ -42,6 +36,12 @@
 
         /// <inheritdoc/>
         public AirConditionerMode CurrentMode { get; private set; }
+
+        /// <inheritdoc/>
+        public double MinTemperature => 5;
+
+        /// <inheritdoc/>
+        public double MaxTemperature => 40;
 
         /// <inheritdoc/>
         public bool IsOn { get; private set; }
@@ -98,7 +98,7 @@
                 await this.currentTemperatureChangeProcess.Cancel();
             }
 
-            await this.CoolRoom(Math.Max(targetTemperature, MIN_TEMPERATURE));
+            await this.CoolRoom(Math.Max(targetTemperature, this.MinTemperature));
 
             return true;
         }
@@ -123,7 +123,7 @@
                 await this.currentTemperatureChangeProcess.Cancel();
             }
 
-            await this.HeatRoom(Math.Min(targetTemperature, MAX_TEMPERATURE));
+            await this.HeatRoom(Math.Min(targetTemperature, this.MaxTemperature));
 
             return true;
         }

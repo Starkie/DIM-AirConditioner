@@ -72,16 +72,16 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartCoolingMode_TargetTemperatureLowerThanMix_AirConditionerCoolsRoomToMin()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), FakeAirConditioner.MIN_TEMPERATURE + 1, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 5 + 1, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
-            await airConditioner.StartCoolingMode(FakeAirConditioner.MIN_TEMPERATURE - 1);
+            await airConditioner.StartCoolingMode(airConditioner.MinTemperature - 1);
 
             // Assert
             await Task.Delay(TimeSpan.FromSeconds(1));
 
-            airConditioner.RoomTemperature.Should().Be(FakeAirConditioner.MIN_TEMPERATURE);
+            airConditioner.RoomTemperature.Should().Be(airConditioner.MinTemperature);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
 
@@ -136,16 +136,16 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartHeatingMode_TargetTemperatureHigherThanMax_AirConditionerHeatsRoomToMax()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), FakeAirConditioner.MAX_TEMPERATURE - 1, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 40 - 1, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
-            await airConditioner.StartHeatingMode(FakeAirConditioner.MAX_TEMPERATURE + 1);
+            await airConditioner.StartHeatingMode(airConditioner.MaxTemperature + 1);
 
             // Assert
             await Task.Delay(TimeSpan.FromSeconds(1));
 
-            airConditioner.RoomTemperature.Should().Be(FakeAirConditioner.MAX_TEMPERATURE);
+            airConditioner.RoomTemperature.Should().Be(airConditioner.MaxTemperature);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
 
@@ -158,7 +158,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
             airConditioner.PowerOn();
 
             // Act.
-            await airConditioner.StartHeatingMode(FakeAirConditioner.MAX_TEMPERATURE);
+            await airConditioner.StartHeatingMode(airConditioner.MaxTemperature);
 
             await Task.Delay(TimeSpan.FromSeconds(1));
             airConditioner.RoomTemperature.Should().BeGreaterThan(initialTemperature);
@@ -167,7 +167,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
             airConditioner.PowerOff();
 
             // Assert
-            airConditioner.RoomTemperature.Should().BeLessThan(FakeAirConditioner.MAX_TEMPERATURE);
+            airConditioner.RoomTemperature.Should().BeLessThan(airConditioner.MaxTemperature);
             airConditioner.CurrentMode.Should().Be(AirConditionerMode.StandBy);
         }
     }
