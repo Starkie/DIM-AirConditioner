@@ -53,6 +53,7 @@
         public bool PowerOn()
         {
             this.IsOn = true;
+            this.logger.LogInformation(FakeAirConditionerResources.AirConditionerPoweredOn);
             this.LogCurrentRoomTemperature();
 
             return true;
@@ -69,6 +70,7 @@
                 Task.WaitAll(this.currentTemperatureChangeProcess.Cancel());
             }
 
+            this.logger.LogInformation(FakeAirConditionerResources.AirConditionerPoweredOff);
             this.LogCurrentRoomTemperature();
 
             return true;
