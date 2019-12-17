@@ -18,7 +18,7 @@
         /// <returns> The catalogue with the added command. </returns>
         public static Choices AddPowerOnCommand(this Choices commandCatalogue)
         {
-            GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOnCommand);
+            GrammarBuilder powerOnAirConditionerCommand = new GrammarBuilder(VoiceCommands.PowerOnCommand);
             SemanticResultKey powerOnCommandMapping = new SemanticResultKey("PowerOn", powerOnAirConditionerCommand);
 
             commandCatalogue.Add(powerOnCommandMapping);
@@ -31,7 +31,7 @@
         /// <returns> The catalogue with the added command. </returns>
         public static Choices AddPowerOffCommand(this Choices commandCatalogue)
         {
-            GrammarBuilder powerOffAirConditionerCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.PowerOffCommand);
+            GrammarBuilder powerOffAirConditionerCommand = new GrammarBuilder(VoiceCommands.PowerOffCommand);
             SemanticResultKey powerOffCommandMapping = new SemanticResultKey("PowerOff", powerOffAirConditionerCommand);
 
             commandCatalogue.Add(powerOffCommandMapping);
@@ -46,7 +46,7 @@
         /// <returns> The catalogue with the added command. </returns>
         public static Choices AddCurrentTemperatureCommand(this Choices commandCatalogue)
         {
-            GrammarBuilder currentTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.CurrentTemperatureCommand);
+            GrammarBuilder currentTemperatureCommand = new GrammarBuilder(VoiceCommands.CurrentTemperatureCommand);
             SemanticResultKey currentTemperatureMapping = new SemanticResultKey("CurrentTemperature", currentTemperatureCommand);
 
             commandCatalogue.Add(currentTemperatureMapping);
@@ -60,13 +60,13 @@
         public static Choices AddHeatRoomCommand(this Choices commandCatalogue)
         {
             Choices heatRoomChoices = new Choices(
-                AirConditionerControlVoiceCommands.HeatRoom,
-                AirConditionerControlVoiceCommands.HeatRoom2,
-                AirConditionerControlVoiceCommands.HeatRoom3);
+                VoiceCommands.HeatRoom,
+                VoiceCommands.HeatRoom2,
+                VoiceCommands.HeatRoom3);
 
             GrammarBuilder heatRoomCommand = new GrammarBuilder(heatRoomChoices);
             heatRoomCommand.Append(TargetTempMapping);
-            heatRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+            heatRoomCommand.Append(VoiceCommands.DegreesKeyWord);
 
             SemanticResultKey heatRoomCommandMapping = new SemanticResultKey("HeatRoom", heatRoomCommand);
 
@@ -81,13 +81,13 @@
         public static Choices AddCoolRoomCommand(this Choices commandCatalogue)
         {
             Choices coolRoomChoices = new Choices(
-                AirConditionerControlVoiceCommands.CoolRoom,
-                AirConditionerControlVoiceCommands.CoolRoom2,
-                AirConditionerControlVoiceCommands.CoolRoom3);
+                VoiceCommands.CoolRoom,
+                VoiceCommands.CoolRoom2,
+                VoiceCommands.CoolRoom3);
 
             GrammarBuilder coolRoomCommand = new GrammarBuilder(coolRoomChoices);
             coolRoomCommand.Append(TargetTempMapping);
-            coolRoomCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+            coolRoomCommand.Append(VoiceCommands.DegreesKeyWord);
 
             SemanticResultKey coolRoomCommandMapping = new SemanticResultKey("CoolRoom", coolRoomCommand);
 
@@ -103,9 +103,9 @@
         /// <returns> The catalogue with the added command. </returns>
         public static Choices AddChangeTemperatureCommand(this Choices commandCatalogue)
         {
-            GrammarBuilder changeRoomTemperatureCommand = new GrammarBuilder(AirConditionerControlVoiceCommands.ChangeTemperatureCommand);
+            GrammarBuilder changeRoomTemperatureCommand = new GrammarBuilder(VoiceCommands.ChangeTemperatureCommand);
             changeRoomTemperatureCommand.Append(TargetTempMapping);
-            changeRoomTemperatureCommand.Append(AirConditionerControlVoiceCommands.DegreesKeyWord);
+            changeRoomTemperatureCommand.Append(VoiceCommands.DegreesKeyWord);
 
             SemanticResultKey changeRoomTemperatureCommandMapping = new SemanticResultKey("ChangeRoomTemp", changeRoomTemperatureCommand);
 

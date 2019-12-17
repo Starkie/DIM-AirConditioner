@@ -135,14 +135,14 @@
         {
             if (this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.AlreadyOn);
+                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOn);
 
                 return;
             }
 
             this.airConditioner.PowerOn();
 
-            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.PoweredOn);
+            this.speechSynthesizer.SpeakAsync(SpeechResponses.PoweredOn);
         }
 
         /// <summary> Command to power off the <see cref="IAirConditioner"/>. </summary>
@@ -150,14 +150,14 @@
         {
             if (!this.airConditioner.IsOn)
             {
-                this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.AlreadyOff);
+                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOff);
 
                 return;
             }
 
-            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.TurningOff);
+            this.speechSynthesizer.SpeakAsync(SpeechResponses.TurningOff);
             this.airConditioner.PowerOff();
-            this.speechSynthesizer.SpeakAsync(AirConditionerSpeechResponses.TurnedOff);
+            this.speechSynthesizer.SpeakAsync(SpeechResponses.TurnedOff);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@
         /// </summary>
         private void CurrentTemperatureCommand()
         {
-            this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
+            this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
         }
 
         /// <summary>
@@ -187,11 +187,11 @@
 
             if (wasHeatingModeEnabled)
             {
-                this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.HeatingRoomToTemperature, targetTemperature));
+                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.HeatingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature >= targetTemperature)
             {
-                this.speechSynthesizer.Speak(AirConditionerSpeechResponses.FailStartingUp);
+                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
 
                 this.CurrentTemperatureCommand();
 
@@ -219,11 +219,11 @@
 
             if (wasCoolingModeEnabled)
             {
-                this.speechSynthesizer.SpeakAsync(string.Format(AirConditionerSpeechResponses.CoolingRoomToTemperature, targetTemperature));
+                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CoolingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature <= targetTemperature)
             {
-                this.speechSynthesizer.Speak(AirConditionerSpeechResponses.FailStartingUp);
+                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
 
                 this.CurrentTemperatureCommand();
 

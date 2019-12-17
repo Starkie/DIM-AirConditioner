@@ -22,14 +22,14 @@ namespace Dim.AirConditioner.Control.Cli {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AirConditionerSpeechResponses {
+    internal class SpeechResponses {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AirConditionerSpeechResponses() {
+        internal SpeechResponses() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Dim.AirConditioner.Control.Cli {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dim.AirConditioner.Control.Cli.AirConditionerSpeechResponses", typeof(AirConditionerSpeechResponses).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dim.AirConditioner.Control.Cli.SpeechResponses", typeof(SpeechResponses).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
