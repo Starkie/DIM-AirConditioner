@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Speech.Recognition;
+    using Dim.AirConditioner.Control.Cli.Resources;
 
     /// <summary> Class containing extension methods for building the Air Conditioner grammar. </summary>
     internal static class AirConditionerGrammarExtensions

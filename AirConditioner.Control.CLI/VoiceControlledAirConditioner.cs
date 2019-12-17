@@ -2,6 +2,7 @@
 {
     using System.Speech.Recognition;
     using System.Speech.Synthesis;
+    using Dim.AirConditioner.Control.Cli.Resources;
     using Dim.AirConditioner.Control.Cli.SpeechRecognition;
     using Dim.AirConditioner.Logic;
     using Microsoft.Extensions.Logging;

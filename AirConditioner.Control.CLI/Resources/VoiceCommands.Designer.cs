@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dim.AirConditioner.Control.Cli {
+namespace Dim.AirConditioner.Control.Cli.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Dim.AirConditioner.Control.Cli {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SpeechResponses {
+    internal class VoiceCommands {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SpeechResponses() {
+        internal VoiceCommands() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Dim.AirConditioner.Control.Cli {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dim.AirConditioner.Control.Cli.SpeechResponses", typeof(SpeechResponses).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dim.AirConditioner.Control.Cli.Resources.VoiceCommands", typeof(VoiceCommands).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,101 @@ namespace Dim.AirConditioner.Control.Cli {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to El aire acondicionado ya estaba apagado..
+        ///   Looks up a localized string similar to Cambiar temperatura a.
         /// </summary>
-        internal static string AlreadyOff {
+        internal static string ChangeTemperatureCommand {
             get {
-                return ResourceManager.GetString("AlreadyOff", resourceCulture);
+                return ResourceManager.GetString("ChangeTemperatureCommand", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to El aire acondicionado ya estaba encendido..
+        ///   Looks up a localized string similar to Enfríar la habitación a.
         /// </summary>
-        internal static string AlreadyOn {
+        internal static string CoolRoom {
             get {
-                return ResourceManager.GetString("AlreadyOn", resourceCulture);
+                return ResourceManager.GetString("CoolRoom", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enfriando la habitación a {0} grados centígrados..
+        ///   Looks up a localized string similar to Bajar temperatura a.
         /// </summary>
-        internal static string CoolingRoomToTemperature {
+        internal static string CoolRoom2 {
             get {
-                return ResourceManager.GetString("CoolingRoomToTemperature", resourceCulture);
+                return ResourceManager.GetString("CoolRoom2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to La temperatura actual en la habitación es de {0} grados centígrados..
+        ///   Looks up a localized string similar to Reducir temperatura a.
         /// </summary>
-        internal static string CurrentTemperatureResponse {
+        internal static string CoolRoom3 {
             get {
-                return ResourceManager.GetString("CurrentTemperatureResponse", resourceCulture);
+                return ResourceManager.GetString("CoolRoom3", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No se ha activado el aire acondicionado..
+        ///   Looks up a localized string similar to Temperatura actual.
         /// </summary>
-        internal static string FailStartingUp {
+        internal static string CurrentTemperatureCommand {
             get {
-                return ResourceManager.GetString("FailStartingUp", resourceCulture);
+                return ResourceManager.GetString("CurrentTemperatureCommand", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calentando la habitación a {0} grados centígrados..
+        ///   Looks up a localized string similar to Grados.
         /// </summary>
-        internal static string HeatingRoomToTemperature {
+        internal static string DegreesKeyWord {
             get {
-                return ResourceManager.GetString("HeatingRoomToTemperature", resourceCulture);
+                return ResourceManager.GetString("DegreesKeyWord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aire acondicionado encendido..
+        ///   Looks up a localized string similar to Calentar la habitación a.
         /// </summary>
-        internal static string PoweredOn {
+        internal static string HeatRoom {
             get {
-                return ResourceManager.GetString("PoweredOn", resourceCulture);
+                return ResourceManager.GetString("HeatRoom", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aire acondicionado apagado..
+        ///   Looks up a localized string similar to Aumentar temperatura a.
         /// </summary>
-        internal static string TurnedOff {
+        internal static string HeatRoom2 {
             get {
-                return ResourceManager.GetString("TurnedOff", resourceCulture);
+                return ResourceManager.GetString("HeatRoom2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Apagando aire acondicionado.&quot;).
+        ///   Looks up a localized string similar to Subir temperatura a.
         /// </summary>
-        internal static string TurningOff {
+        internal static string HeatRoom3 {
             get {
-                return ResourceManager.GetString("TurningOff", resourceCulture);
+                return ResourceManager.GetString("HeatRoom3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apagar aire acondicionado.
+        /// </summary>
+        internal static string PowerOffCommand {
+            get {
+                return ResourceManager.GetString("PowerOffCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encender aire acondicionado.
+        /// </summary>
+        internal static string PowerOnCommand {
+            get {
+                return ResourceManager.GetString("PowerOnCommand", resourceCulture);
             }
         }
     }

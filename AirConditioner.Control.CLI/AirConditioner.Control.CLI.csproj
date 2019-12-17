@@ -25,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="VoiceCommands.Designer.cs">
+    <Compile Update="Resources\VoiceCommands.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>VoiceCommands.resx</DependentUpon>
     </Compile>
-    <Compile Update="SpeechResponses.Designer.cs">
+    <Compile Update="Resources\SpeechResponses.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>SpeechResponses.resx</DependentUpon>
@@ -38,11 +38,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="VoiceCommands.resx">
+    <EmbeddedResource Update="Resources\VoiceCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VoiceCommands.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="SpeechResponses.resx">
+    <EmbeddedResource Update="Resources\SpeechResponses.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SpeechResponses.Designer.cs</LastGenOutput>
     </EmbeddedResource>
