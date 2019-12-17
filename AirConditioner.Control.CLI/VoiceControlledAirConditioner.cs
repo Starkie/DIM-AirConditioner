@@ -17,10 +17,10 @@
         // The air conditioner to control by the voice commands.
         private readonly IAirConditioner airConditioner;
 
-        // The instance of the speech recognizar, that interprets the voice commands.
+        // The instance of the speech recognizer, that interprets the voice commands.
         private readonly SpeechRecognitionEngine speechRecognizer;
 
-        // The instance of the speech synthetizer, that 'speaks' the system responses.
+        // The instance of the speech synthesizer, that 'speaks' the system responses.
         private readonly SpeechSynthesizer speechSynthesizer;
 
         /// <summary>
@@ -43,6 +43,10 @@
             this.PowerOnCommand();
         }
 
+        /// <summary>
+        ///     Sets up the <see cref="SpeechRecognitionEngine"/> with the required commands that
+        ///     allow the voice control of the <see cref="IAirConditioner"/>.
+        /// </summary>
         private void SetUpSpeechRecognizerCommands()
         {
             // Only commands recognized with a 60% confidence will be accepted and executed.
@@ -56,12 +60,16 @@
             // Set up input device. Picks the default microphone configured in the system.
             this.speechRecognizer.SetInputToDefaultAudioDevice();
 
-            // Set up the event handler, which will redirect the commands to the aproppiate code.
+            // Set up the event handler, which will redirect the commands to the appropriate code.
             this.speechRecognizer.SpeechRecognized += this.Recognizer_SpeechRecognized;
 
             this.speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
         }
 
+        /// <summary>
+        ///     Builds the grammar required to recognize the voice commands that control the <see cref="IAirConditioner"/>.
+        /// </summary>
+        /// <returns> The grammar with the supported commands. </returns>
         private Grammar BuildAirConditionerControlGrammar()
         {
             Choices commandCatalog = new Choices();
@@ -81,9 +89,6 @@
         private void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             SemanticValue semantics = e.Result.Semantics;
-
-            string rawText = e.Result.Text;
-            RecognitionResult result = e.Result;
 
             if (semantics.ContainsKey("PowerOn"))
             {
@@ -121,7 +126,7 @@
                 SemanticValue coolRoomSemanticValue = semantics["ChangeRoomTemp"];
                 double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                ChangeRoomTemperatureCommand(targetTemperature);
+                this.ChangeRoomTemperatureCommand(targetTemperature);
             }
         }
 
