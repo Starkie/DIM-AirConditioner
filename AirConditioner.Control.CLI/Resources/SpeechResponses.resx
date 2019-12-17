@@ -135,6 +135,12 @@
   <data name="HeatingRoomToTemperature" xml:space="preserve">
     <value>Calentando la habitación a {0} grados centígrados.</value>
   </data>
+  <data name="HigherThanMaxTemperature" xml:space="preserve">
+    <value>La temperatura de {0} grados sobrepasa el máximo de {1} grados.</value>
+  </data>
+  <data name="LowerThanMinTemperature" xml:space="preserve">
+    <value>La temperatura de {0} grados es inferior al mínimo de {1} grados.</value>
+  </data>
   <data name="PoweredOn" xml:space="preserve">
     <value>Aire acondicionado encendido.</value>
   </data>
@@ -142,6 +148,6 @@
     <value>Aire acondicionado apagado.</value>
   </data>
   <data name="TurningOff" xml:space="preserve">
-    <value>"Apagando aire acondicionado.")</value>
+    <value>Apagando aire acondicionado.</value>
   </data>
 </root>

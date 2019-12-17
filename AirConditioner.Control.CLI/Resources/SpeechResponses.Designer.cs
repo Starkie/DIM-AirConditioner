@@ -115,6 +115,24 @@ namespace Dim.AirConditioner.Control.Cli.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to La temperatura de {0} grados sobrepasa el máximo de {1} grados..
+        /// </summary>
+        internal static string HigherThanMaxTemperature {
+            get {
+                return ResourceManager.GetString("HigherThanMaxTemperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La temperatura de {0} grados es inferior al mínimo de {1} grados..
+        /// </summary>
+        internal static string LowerThanMinTemperature {
+            get {
+                return ResourceManager.GetString("LowerThanMinTemperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aire acondicionado encendido..
         /// </summary>
         internal static string PoweredOn {
@@ -133,7 +151,7 @@ namespace Dim.AirConditioner.Control.Cli.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Apagando aire acondicionado.&quot;).
+        ///   Looks up a localized string similar to Apagando aire acondicionado..
         /// </summary>
         internal static string TurningOff {
             get {

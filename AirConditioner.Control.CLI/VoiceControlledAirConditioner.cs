@@ -91,6 +91,8 @@
         {
             SemanticValue semantics = e.Result.Semantics;
 
+            this.logger.LogInformation("Recognized Text: " + e.Result.Text);
+
             if (semantics.ContainsKey("PowerOn"))
             {
                 this.PowerOnCommand();
@@ -188,6 +190,12 @@
 
             if (wasHeatingModeEnabled)
             {
+                if (targetTemperature > this.airConditioner.MaxTemperature)
+                {
+                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.HigherThanMaxTemperature, targetTemperature, this.airConditioner.MaxTemperature));
+                    targetTemperature = this.airConditioner.MaxTemperature;
+                }
+
                 this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.HeatingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature >= targetTemperature)
@@ -220,6 +228,12 @@
 
             if (wasCoolingModeEnabled)
             {
+                if (targetTemperature < this.airConditioner.MinTemperature)
+                {
+                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.LowerThanMinTemperature, targetTemperature, this.airConditioner.MinTemperature));
+                    targetTemperature = this.airConditioner.MinTemperature;
+                }
+
                 this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CoolingRoomToTemperature, targetTemperature));
             }
             else if (this.airConditioner.RoomTemperature <= targetTemperature)
