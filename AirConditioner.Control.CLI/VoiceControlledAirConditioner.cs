@@ -178,10 +178,13 @@ namespace Dim.AirConditioner.Control.Cli
                 this.PowerOn();
             }
 
+            // Try to start air conditioner.
             bool wasCoolingModeEnabled = await this.airConditioner.StartCoolingMode(targetTemperature);
 
             if (wasCoolingModeEnabled)
             {
+                // If the target temperature was lower than the minimum temperature, it will have
+                // been truncated to that. Must inform the user.
                 if (targetTemperature < this.MinTemperature)
                 {
                     this.speechSynthesizer.Speak(string.Format(SpeechResponses.LowerThanMinTemperature, targetTemperature, this.MinTemperature));
@@ -190,6 +193,9 @@ namespace Dim.AirConditioner.Control.Cli
 
                 this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CoolingRoomToTemperature, targetTemperature));
             }
+
+            // If the air conditioner wasn't started because the room temperature was already lower
+            // than the target temperature.
             else if (this.RoomTemperature <= targetTemperature)
             {
                 this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
@@ -210,10 +216,13 @@ namespace Dim.AirConditioner.Control.Cli
                 this.PowerOn();
             }
 
+            // Try to start the air conditioner in heating mode.
             bool wasHeatingModeEnabled = await this.airConditioner.StartHeatingMode(targetTemperature);
 
             if (wasHeatingModeEnabled)
             {
+                // If the target temperature was higher than the Max. temperature, it will have been
+                // truncated to that. Must inform the user.
                 if (targetTemperature > this.MaxTemperature)
                 {
                     this.speechSynthesizer.Speak(string.Format(SpeechResponses.HigherThanMaxTemperature, targetTemperature, this.MaxTemperature));
@@ -222,6 +231,9 @@ namespace Dim.AirConditioner.Control.Cli
 
                 this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.HeatingRoomToTemperature, targetTemperature));
             }
+
+            // If the air conditioner wasn't started because the room temperature was already higher
+            // than the target temperature. Must also inform the user.
             else if (this.RoomTemperature >= targetTemperature)
             {
                 this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
