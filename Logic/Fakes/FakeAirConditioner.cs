@@ -126,14 +126,14 @@ namespace Dim.AirConditioner.Logic.Fakes
 
         /// <summary>
         ///     Generates an initial room temperature, for the air conditioner. The values returned
-        ///     will be between 0ºc and 35ºc.
+        ///     will be between <see cref="MinTemperature"/> and <see cref="MaxTemperature"/>.
         /// </summary>
         /// <returns> A valid room temperature. </returns>
         private int GenerateInitialRoomTemperature()
         {
             Random random = new Random();
 
-            return random.Next(0, 35);
+            return random.Next((int)this.MinTemperature + 1, (int)this.MaxTemperature - 1);
         }
 
         /// <summary> Process that cools down the current room to a target temperature. </summary>
