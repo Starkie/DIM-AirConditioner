@@ -42,9 +42,7 @@ namespace Dim.AirConditioner.Control.Cli
         {
             this.logger = logger;
             this.airConditioner = airConditioner;
-
             this.speechSynthesizer = speechSynthesizer;
-
             this.speechRecognizer = speechRecognition;
 
             // Set up the event handler, which will redirect the commands to the appropriate code.
