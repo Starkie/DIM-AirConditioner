@@ -29,7 +29,7 @@ namespace Dim.AirConditioner.Logic.Fakes
         ///     (Optional) Configures the seconds that must pass for the
         ///     <see cref="RoomTemperature"/> to change during a <see cref="TemperatureChangeProcess"/>.
         /// </param>
-        public FakeAirConditioner(ILogger logger, double? initialTemperature = null, int secondsToTemperatureChange = 5)
+        public FakeAirConditioner(ILogger<IAirConditioner> logger, double? initialTemperature = null, int secondsToTemperatureChange = 5)
         {
             this.CurrentMode = AirConditionerMode.StandBy;
             this.IsOn = false;

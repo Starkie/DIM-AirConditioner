@@ -38,7 +38,7 @@ namespace Dim.AirConditioner.Control.Cli
         ///     An instance of the speech synthesizer, to output vocal responses to the user.
         /// </param>
         /// <param name="logger"> The logger. </param>
-        public VoiceControlledAirConditioner(IAirConditioner airConditioner, AirConditionerSpeechRecognition speechRecognition, SpeechSynthesizer speechSynthesizer, ILogger logger)
+        public VoiceControlledAirConditioner(IAirConditioner airConditioner, AirConditionerSpeechRecognition speechRecognition, SpeechSynthesizer speechSynthesizer, ILogger<IAirConditioner> logger)
         {
             this.logger = logger;
             this.airConditioner = airConditioner;

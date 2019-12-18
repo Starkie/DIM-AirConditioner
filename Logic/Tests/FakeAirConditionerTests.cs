@@ -25,7 +25,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task SetToCoolingMode_CurrentRoomTemperatureLowerThanTarget_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 5, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 5, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -40,7 +40,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task SetToCoolingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOff();
 
             // Act.
@@ -55,7 +55,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task SetToCoolingMode_RoomTemperatureIsHigherThanTarget_AirConditionerCoolsRoom()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -72,7 +72,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartCoolingMode_TargetTemperatureLowerThanMix_AirConditionerCoolsRoomToMin()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 5 + 1, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 5 + 1, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -89,7 +89,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartHeatingMode_CurrentRoomTemperatureHigherThanTarget_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 30, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 30, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -104,7 +104,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartHeatingMode_AirConditionerIsOff_AirConditionerSwitchesToStandBy()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOff();
 
             // Act.
@@ -119,7 +119,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartHeatingMode_RoomTemperatureIsLowerThanTarget_AirConditionerHeatsRoom()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 10, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 10, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -136,7 +136,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         public async Task StartHeatingMode_TargetTemperatureHigherThanMax_AirConditionerHeatsRoomToMax()
         {
             // Arrange.
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), 40 - 1, secondsToTemperatureChange: 0);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), 40 - 1, secondsToTemperatureChange: 0);
             airConditioner.PowerOn();
 
             // Act.
@@ -154,7 +154,7 @@ namespace Dim.AirConditioner.Logic.Fakes.Tests
         {
             // Arrange.
             int initialTemperature = 20;
-            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger(LogName), initialTemperature, secondsToTemperatureChange: 1);
+            IAirConditioner airConditioner = new FakeAirConditioner(LoggerFactory.CreateLogger<IAirConditioner>(), initialTemperature, secondsToTemperatureChange: 1);
             airConditioner.PowerOn();
 
             // Act.
