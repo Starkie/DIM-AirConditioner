@@ -212,6 +212,8 @@ namespace Dim.AirConditioner.Logic.Fakes
 
         private void LogCurrentRoomTemperature()
         {
+            string power = this.IsOn ? "ON" : "OFF";
+
             string modeName = string.Empty;
 
             switch (this.CurrentMode)
@@ -229,7 +231,7 @@ namespace Dim.AirConditioner.Logic.Fakes
                     break;
             }
 
-            this.logger.LogInformation(FakeAirConditionerResources.CurrentRoomTemperature, modeName, this.RoomTemperature);
+            this.logger.LogInformation(FakeAirConditionerResources.CurrentRoomTemperature, power, modeName, this.RoomTemperature);
         }
     }
 }

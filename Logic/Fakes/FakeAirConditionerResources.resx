@@ -124,6 +124,6 @@
     <value>Air Conditioner powered ON.</value>
   </data>
   <data name="CurrentRoomTemperature" xml:space="preserve">
-    <value>{0} - Room Temperature is {1}ºc.</value>
+    <value>{0}: {1} - Room Temperature is {1}ºc.</value>
   </data>
 </root>

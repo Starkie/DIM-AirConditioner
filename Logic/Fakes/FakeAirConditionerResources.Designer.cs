@@ -79,7 +79,7 @@ namespace Dim.AirConditioner.Logic.Fakes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} - Room Temperature is {1}ºc..
+        ///   Looks up a localized string similar to {0}: {1} - Room Temperature is {1}ºc..
         /// </summary>
         internal static string CurrentRoomTemperature {
             get {
