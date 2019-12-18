@@ -1,7 +1,8 @@
-﻿namespace Dim.AirConditioner.Control.Cli
+namespace Dim.AirConditioner.Control.Cli
 {
     using System.Speech.Recognition;
     using System.Speech.Synthesis;
+    using System.Threading.Tasks;
     using Dim.AirConditioner.Control.Cli.Resources;
     using Dim.AirConditioner.Control.Cli.SpeechRecognition;
     using Dim.AirConditioner.Logic;
@@ -10,7 +11,7 @@
     /// <summary>
     ///     Class that allows the control of an <see cref="IAirConditioner"/> by voice commands.
     /// </summary>
-    public class VoiceControlledAirConditioner
+    public class VoiceControlledAirConditioner : IAirConditioner
     {
         // The instance of the applications logger.
         private readonly ILogger logger;
@@ -19,7 +20,7 @@
         private readonly IAirConditioner airConditioner;
 
         // The instance of the speech recognizer, that interprets the voice commands.
-        private readonly SpeechRecognitionEngine speechRecognizer;
+        private readonly AirConditionerSpeechRecognition speechRecognizer;
 
         // The instance of the speech synthesizer, that 'speaks' the system responses.
         private readonly SpeechSynthesizer speechSynthesizer;
@@ -27,62 +28,45 @@
         /// <summary>
         ///     Initializes a new instance of the <see cref="VoiceControlledAirConditioner"/> class.
         /// </summary>
-        /// <param name="logger"> The logger. </param>
         /// <param name="airConditioner">
         ///     The instance of the air conditioner to control by the voice commands.
         /// </param>
-        public VoiceControlledAirConditioner(ILogger logger, IAirConditioner airConditioner)
+        /// <param name="speechRecognition">
+        ///     An instance of the in-process speech recognition engine.
+        /// </param>
+        /// <param name="speechSynthesizer">
+        ///     An instance of the speech synthesizer, to output vocal responses to the user.
+        /// </param>
+        /// <param name="logger"> The logger. </param>
+        public VoiceControlledAirConditioner(IAirConditioner airConditioner, AirConditionerSpeechRecognition speechRecognition, SpeechSynthesizer speechSynthesizer, ILogger logger)
         {
             this.logger = logger;
             this.airConditioner = airConditioner;
 
-            this.speechSynthesizer = new SpeechSynthesizer();
+            this.speechSynthesizer = speechSynthesizer;
 
-            this.speechRecognizer = new SpeechRecognitionEngine();
-            this.SetUpSpeechRecognizerCommands();
-
-            this.PowerOnCommand();
-        }
-
-        /// <summary>
-        ///     Sets up the <see cref="SpeechRecognitionEngine"/> with the required commands that
-        ///     allow the voice control of the <see cref="IAirConditioner"/>.
-        /// </summary>
-        private void SetUpSpeechRecognizerCommands()
-        {
-            // Only commands recognized with a 60% confidence will be accepted and executed.
-            this.speechRecognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
-
-            // Load the grammar.
-            Grammar voiceCommandsGrammar = this.BuildAirConditionerControlGrammar();
-            voiceCommandsGrammar.Enabled = true;
-            this.speechRecognizer.LoadGrammar(voiceCommandsGrammar);
-
-            // Set up input device. Picks the default microphone configured in the system.
-            this.speechRecognizer.SetInputToDefaultAudioDevice();
+            this.speechRecognizer = speechRecognition;
 
             // Set up the event handler, which will redirect the commands to the appropriate code.
-            this.speechRecognizer.SpeechRecognized += this.Recognizer_SpeechRecognized;
+            speechRecognition.SpeechRecognitionEngine.SpeechRecognized += this.Recognizer_SpeechRecognized;
 
-            this.speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+            this.PowerOn();
         }
 
-        /// <summary>
-        ///     Builds the grammar required to recognize the voice commands that control the <see cref="IAirConditioner"/>.
-        /// </summary>
-        /// <returns> The grammar with the supported commands. </returns>
-        private Grammar BuildAirConditionerControlGrammar()
-        {
-            Choices commandCatalog = new Choices();
+        /// <inheritdoc/>
+        public AirConditionerMode CurrentMode => this.airConditioner.CurrentMode;
 
-            return commandCatalog.AddPowerOnCommand()
-                .AddPowerOffCommand()
-                .AddCurrentTemperatureCommand()
-                .AddHeatRoomCommand()
-                .AddCoolRoomCommand()
-                .AddChangeTemperatureCommand()
-                .BuildGrammar();
-        }
+        /// <inheritdoc/>
+        public bool IsOn => this.airConditioner.IsOn;
+
+        /// <inheritdoc/>
+        public double RoomTemperature => this.airConditioner.RoomTemperature;
+
+        /// <inheritdoc/>
+        public double MinTemperature => this.airConditioner.MinTemperature;
+
+        /// <inheritdoc/>
+        public double MaxTemperature => this.airConditioner.MaxTemperature;
 
         /// <summary> Event handler tasked with routing the recognized voice commands. </summary>
         /// <param name="sender"> The object that caused the event. </param>
@@ -95,12 +79,12 @@
 
             if (semantics.ContainsKey("PowerOn"))
             {
-                this.PowerOnCommand();
+                this.PowerOn();
             }
 
             if (semantics.ContainsKey("PowerOff"))
             {
-                this.PowerOffCommand();
+                this.PowerOff();
             }
 
             if (semantics.ContainsKey("CurrentTemperature"))
@@ -113,7 +97,7 @@
                 SemanticValue heatRoomSemanticValue = semantics["HeatRoom"];
                 double targetTemperature = double.Parse(heatRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                this.HeatRoomCoomand(targetTemperature);
+                Task.WaitAny(this.StartHeatingMode(targetTemperature));
             }
 
             if (semantics.ContainsKey("CoolRoom"))
@@ -121,7 +105,7 @@
                 SemanticValue coolRoomSemanticValue = semantics["CoolRoom"];
                 double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                this.CoolRoomCommand(targetTemperature);
+                Task.WaitAny(this.StartCoolingMode(targetTemperature));
             }
 
             if (semantics.ContainsKey("ChangeRoomTemp"))
@@ -129,38 +113,8 @@
                 SemanticValue coolRoomSemanticValue = semantics["ChangeRoomTemp"];
                 double targetTemperature = double.Parse(coolRoomSemanticValue["TargetTemp"].Value.ToString());
 
-                this.ChangeRoomTemperatureCommand(targetTemperature);
+                Task.WaitAny(this.ChangeRoomTemperatureCommand(targetTemperature));
             }
-        }
-
-        /// <summary> Command to power on the <see cref="IAirConditioner"/>. </summary>
-        private void PowerOnCommand()
-        {
-            if (this.airConditioner.IsOn)
-            {
-                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOn);
-
-                return;
-            }
-
-            this.airConditioner.PowerOn();
-
-            this.speechSynthesizer.SpeakAsync(SpeechResponses.PoweredOn);
-        }
-
-        /// <summary> Command to power off the <see cref="IAirConditioner"/>. </summary>
-        private void PowerOffCommand()
-        {
-            if (!this.airConditioner.IsOn)
-            {
-                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOff);
-
-                return;
-            }
-
-            this.speechSynthesizer.SpeakAsync(SpeechResponses.TurningOff);
-            this.airConditioner.PowerOff();
-            this.speechSynthesizer.SpeakAsync(SpeechResponses.TurnedOff);
         }
 
         /// <summary>
@@ -168,82 +122,7 @@
         /// </summary>
         private void CurrentTemperatureCommand()
         {
-            this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CurrentTemperatureResponse, this.airConditioner.RoomTemperature));
-        }
-
-        /// <summary>
-        ///     Command to start the <see cref="IAirConditioner"/> and heat the room to the target temperature.
-        /// </summary>
-        /// <param name="targetTemperature"> The temperature to heat the room to. </param>
-        /// <remarks>
-        ///     If the target temperature is lower than the current
-        ///     <see cref="IAirConditioner.RoomTemperature"/>, the air conditioner will not start.
-        /// </remarks>
-        private void HeatRoomCoomand(double targetTemperature)
-        {
-            if (!this.airConditioner.IsOn)
-            {
-                this.PowerOnCommand();
-            }
-
-            bool wasHeatingModeEnabled = this.airConditioner.StartHeatingMode(targetTemperature).Result;
-
-            if (wasHeatingModeEnabled)
-            {
-                if (targetTemperature > this.airConditioner.MaxTemperature)
-                {
-                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.HigherThanMaxTemperature, targetTemperature, this.airConditioner.MaxTemperature));
-                    targetTemperature = this.airConditioner.MaxTemperature;
-                }
-
-                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.HeatingRoomToTemperature, targetTemperature));
-            }
-            else if (this.airConditioner.RoomTemperature >= targetTemperature)
-            {
-                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
-
-                this.CurrentTemperatureCommand();
-
-                this.PowerOffCommand();
-            }
-        }
-
-        /// <summary>
-        ///     Command to start the <see cref="IAirConditioner"/> and cool down the room to the
-        ///     target temperature.
-        /// </summary>
-        /// <param name="targetTemperature"> The temperature to cool down the room to. </param>
-        /// <remarks>
-        ///     If the target temperature is higher than the current
-        ///     <see cref="IAirConditioner.RoomTemperature"/>, the air conditioner will not start.
-        /// </remarks>
-        private void CoolRoomCommand(double targetTemperature)
-        {
-            if (!this.airConditioner.IsOn)
-            {
-                this.PowerOnCommand();
-            }
-
-            bool wasCoolingModeEnabled = this.airConditioner.StartCoolingMode(targetTemperature).Result;
-
-            if (wasCoolingModeEnabled)
-            {
-                if (targetTemperature < this.airConditioner.MinTemperature)
-                {
-                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.LowerThanMinTemperature, targetTemperature, this.airConditioner.MinTemperature));
-                    targetTemperature = this.airConditioner.MinTemperature;
-                }
-
-                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CoolingRoomToTemperature, targetTemperature));
-            }
-            else if (this.airConditioner.RoomTemperature <= targetTemperature)
-            {
-                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
-
-                this.CurrentTemperatureCommand();
-
-                this.PowerOffCommand();
-            }
+            this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CurrentTemperatureResponse, this.RoomTemperature));
         }
 
         /// <summary>
@@ -253,16 +132,108 @@
         /// <param name="targetTemperature">
         ///     The temperature to heat up/cool down the room to.
         /// </param>
-        private void ChangeRoomTemperatureCommand(double targetTemperature)
+        private async Task ChangeRoomTemperatureCommand(double targetTemperature)
         {
-            if (targetTemperature > this.airConditioner.RoomTemperature)
+            if (targetTemperature > this.RoomTemperature)
             {
-                this.HeatRoomCoomand(targetTemperature);
+                await this.StartHeatingMode(targetTemperature);
             }
             else
             {
-                this.CoolRoomCommand(targetTemperature);
+                await this.StartCoolingMode(targetTemperature);
             }
+        }
+
+        /// <inheritdoc/>
+        public bool PowerOn()
+        {
+            if (this.IsOn)
+            {
+                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOn);
+
+                return true;
+            }
+
+            this.speechSynthesizer.SpeakAsync(SpeechResponses.PoweredOn);
+            return this.airConditioner.PowerOn();
+        }
+
+        /// <inheritdoc/>
+        public bool PowerOff()
+        {
+            if (!this.IsOn)
+            {
+                this.speechSynthesizer.SpeakAsync(SpeechResponses.AlreadyOff);
+
+                return true;
+            }
+
+            this.speechSynthesizer.SpeakAsync(SpeechResponses.TurningOff);
+            return this.airConditioner.PowerOff();
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> StartCoolingMode(double targetTemperature)
+        {
+            if (!this.IsOn)
+            {
+                this.PowerOn();
+            }
+
+            bool wasCoolingModeEnabled = await this.airConditioner.StartCoolingMode(targetTemperature);
+
+            if (wasCoolingModeEnabled)
+            {
+                if (targetTemperature < this.MinTemperature)
+                {
+                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.LowerThanMinTemperature, targetTemperature, this.MinTemperature));
+                    targetTemperature = this.MinTemperature;
+                }
+
+                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.CoolingRoomToTemperature, targetTemperature));
+            }
+            else if (this.RoomTemperature <= targetTemperature)
+            {
+                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
+
+                this.CurrentTemperatureCommand();
+
+                this.PowerOff();
+            }
+
+            return wasCoolingModeEnabled;
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> StartHeatingMode(double targetTemperature)
+        {
+            if (!this.IsOn)
+            {
+                this.PowerOn();
+            }
+
+            bool wasHeatingModeEnabled = await this.airConditioner.StartHeatingMode(targetTemperature);
+
+            if (wasHeatingModeEnabled)
+            {
+                if (targetTemperature > this.MaxTemperature)
+                {
+                    this.speechSynthesizer.Speak(string.Format(SpeechResponses.HigherThanMaxTemperature, targetTemperature, this.MaxTemperature));
+                    targetTemperature = this.MaxTemperature;
+                }
+
+                this.speechSynthesizer.SpeakAsync(string.Format(SpeechResponses.HeatingRoomToTemperature, targetTemperature));
+            }
+            else if (this.RoomTemperature >= targetTemperature)
+            {
+                this.speechSynthesizer.Speak(SpeechResponses.FailStartingUp);
+
+                this.CurrentTemperatureCommand();
+
+                this.PowerOff();
+            }
+
+            return wasHeatingModeEnabled;
         }
     }
 }
