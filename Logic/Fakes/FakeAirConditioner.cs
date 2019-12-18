@@ -80,11 +80,7 @@ namespace Dim.AirConditioner.Logic.Fakes
             return true;
         }
 
-        /// <summary>
-        ///     Sets the air conditioner to cooling mode, to a target temperature. If the
-        ///     <see cref="RoomTemperature"/> is lower than the target temperature, it does nothing.
-        /// </summary>
-        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        /// <inheritdoc/>
         public async Task<bool> StartCoolingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature <= targetTemperature)
@@ -107,11 +103,7 @@ namespace Dim.AirConditioner.Logic.Fakes
             return true;
         }
 
-        /// <summary>
-        ///     Sets the air conditioner to heating mode, to a target temperature. If the
-        ///     <see cref="RoomTemperature"/> is higher than the target temperature, it does nothing.
-        /// </summary>
-        /// <param name="targetTemperature"> The temperature to achieve. </param>
+        /// <inheritdoc/>
         public async Task<bool> StartHeatingMode(double targetTemperature)
         {
             if (!this.IsOn || this.RoomTemperature >= targetTemperature)
