@@ -1,4 +1,4 @@
-﻿namespace Dim.AirConditioner.Logic.Fakes
+namespace Dim.AirConditioner.Logic.Fakes
 {
     using System;
     using System.Threading;
@@ -25,6 +25,10 @@
         ///     The initial room temperature. If none is specified, a random temperature is generated.
         /// </param>
         /// <param name="logger"> Instance of a logger. </param>
+        /// <param name="secondsToTemperatureChange">
+        ///     (Optional) Configures the seconds that must pass for the
+        ///     <see cref="RoomTemperature"/> to change during a <see cref="TemperatureChangeProcess"/>.
+        /// </param>
         public FakeAirConditioner(ILogger logger, double? initialTemperature = null, int secondsToTemperatureChange = 5)
         {
             this.CurrentMode = AirConditionerMode.StandBy;
